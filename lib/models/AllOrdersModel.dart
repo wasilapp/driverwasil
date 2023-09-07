@@ -57,8 +57,8 @@ class AllOrders {
     return status==6;
   }
 
-  static bool checkIsActiveOrder(dynamic status){
-    return status>2 && status<5;
+  static bool checkIsActiveOrder(dynamic status){//4
+    return status>2 && status<5;//true
   }
 
 

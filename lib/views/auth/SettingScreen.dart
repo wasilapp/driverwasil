@@ -15,10 +15,12 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../AppTheme.dart';
 import '../../AppThemeNotifier.dart';
 import '../../services/firestore_services.dart';
+import '../../utils/colors.dart';
 import '../SelectLanguageDialog.dart';
 import '../SelectThemeDialog.dart';
 
@@ -43,10 +45,11 @@ class _SettingScreenState extends State<SettingScreen> {
   bool isInProgress = false;
 
   @override
-  void initState() {
+ initState()  {
     super.initState();
     _initUserData();
     firestoreServices = FirestoreServices();
+
   }
 
   _initUserData() async {
@@ -58,11 +61,11 @@ class _SettingScreenState extends State<SettingScreen> {
 
   _changeStatus() async {
 
-
     if (isInProgress) return;
 
     bool status = !deliveryBoy!.isOffline!;
 print(status);
+print(deliveryBoy!.isOffline!);
 print('------------');
     firestoreServices.updateIsOffline(deliveryBoy!,status );
 
@@ -406,12 +409,20 @@ print('------------');
             child: Center(
               child: ElevatedButton(
                 style: ButtonStyle(
+                    backgroundColor: MaterialStatePropertyAll(primaryColor),
                     padding: MaterialStateProperty.all(Spacing.xy(24,12)),
                     shape: MaterialStateProperty.all(RoundedRectangleBorder(
                       borderRadius:  BorderRadius.circular(4),
                     ))
                 ),
                 onPressed: () async {
+
+                  bool status =true;
+                  print(status);
+                  print(deliveryBoy!.isOffline!);
+                  print('------------');
+                  firestoreServices.updateIsOffline(deliveryBoy!,status );
+
                   await AuthController.logoutUser();
                   Navigator.pushReplacement(
                     context,

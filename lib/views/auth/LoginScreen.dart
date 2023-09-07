@@ -2,12 +2,13 @@
 
 import 'dart:developer';
 
+import 'package:DeliveryBoyApp/utils/colors.dart';
 import 'package:country_picker/country_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
-import 'package:DeliveryBoyApp/api/api_util.dart';
+
 import 'package:DeliveryBoyApp/controllers/AuthController.dart';
 import 'package:DeliveryBoyApp/models/MyResponse.dart';
 import 'package:DeliveryBoyApp/services/AppLocalizations.dart';
@@ -119,8 +120,10 @@ class _LoginScreenState extends State<LoginScreen> {
         });
       }
       log("${contrycode+mobile}");
+      log("sss");
       MyResponse response = await AuthController.loginUser("+"+contrycode+mobile, password);
       log(response.data.toString());
+      log("sss");
       AuthType authType = await AuthController.userAuthType();
 
       if (mounted) {
@@ -197,6 +200,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 child: Row(
                                   children: [
                                     ElevatedButton(
+
                                       onPressed: () {
                                         showCountryPicker(
                                           context: context,
@@ -240,7 +244,8 @@ class _LoginScreenState extends State<LoginScreen> {
                                           ),
                                         );
                                       },
-                                      child:  Text(contrycode),
+                                      child:  Text(contrycode,style: TextStyle(color: Colors.white)),
+                                      style: ElevatedButton.styleFrom(backgroundColor: primaryColor),
                                     ),
                                     Spacing.width(8),
                                     Expanded(
@@ -347,6 +352,7 @@ class _LoginScreenState extends State<LoginScreen> {
                           margin: Spacing.fromLTRB(24,24,24,0),
                           child: ElevatedButton(
                             style: ButtonStyle(
+                                backgroundColor: MaterialStatePropertyAll(primaryColor),
                                 padding: MaterialStateProperty.all(Spacing.xy(24,12)),
                                 shape: MaterialStateProperty.all(RoundedRectangleBorder(
                                   borderRadius:  BorderRadius.circular(4),

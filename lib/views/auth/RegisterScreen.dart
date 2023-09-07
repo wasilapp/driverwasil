@@ -7,6 +7,7 @@ import 'package:DeliveryBoyApp/models/MyResponse.dart';
 import 'package:DeliveryBoyApp/services/AppLocalizations.dart';
 import 'package:DeliveryBoyApp/utils/SizeConfig.dart';
 import 'package:DeliveryBoyApp/utils/Validator.dart';
+import 'package:DeliveryBoyApp/utils/colors.dart';
 import 'package:DeliveryBoyApp/views/auth/Categories.dart';
 import 'package:DeliveryBoyApp/views/auth/CategoryController.dart';
 import 'package:country_picker/country_picker.dart';
@@ -193,7 +194,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => OTPVerificationScreen(),
+            builder: (BuildContext context) => MyHomePage(),
           ),
         );
       }
@@ -321,6 +322,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               Row(
                                 children: [
                                   ElevatedButton(
+
                                     onPressed: () {
                                       showCountryPicker(
                                         context: context,
@@ -364,7 +366,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                         ),
                                       );
                                     },
-                                    child:  Text(contrycode),
+                                    child:  Text(contrycode,style: TextStyle(color: Colors.white)),
+                                    style:ElevatedButton.styleFrom(backgroundColor: primaryColor,
+                                    textStyle: TextStyle(color: Colors.white)) ,
                                   ),
                                   Spacing.width(8),
                                   Expanded(
@@ -662,6 +666,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                             margin: Spacing.fromLTRB(24, 24, 24, 0),
                             child: ElevatedButton(
                               style: ButtonStyle(
+                                backgroundColor:MaterialStatePropertyAll(primaryColor) ,
                                   padding: MaterialStateProperty.all(Spacing.xy(24,12)),
                                   shape: MaterialStateProperty.all(RoundedRectangleBorder(
                                     borderRadius:  BorderRadius.circular(4),

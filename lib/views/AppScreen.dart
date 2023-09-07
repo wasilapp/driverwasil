@@ -30,6 +30,8 @@ import '../AppTheme.dart';
 import '../AppThemeNotifier.dart';
 import 'SingleOrderScreen.dart';
 
+
+
 class AppScreen extends StatefulWidget {
   @override
   _AppScreenState createState() => _AppScreenState();
@@ -46,7 +48,7 @@ class _AppScreenState extends State<AppScreen> with WidgetsBindingObserver {
   final GlobalKey<ScaffoldState> _scaffoldKey = new GlobalKey<ScaffoldState>();
   final GlobalKey<ScaffoldMessengerState> _scaffoldMessengerKey = new GlobalKey<ScaffoldMessengerState>();
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
-      new GlobalKey<RefreshIndicatorState>();
+  new GlobalKey<RefreshIndicatorState>();
 
   //Other Variables
   bool isInProgress = false;
@@ -62,8 +64,8 @@ class _AppScreenState extends State<AppScreen> with WidgetsBindingObserver {
     WidgetsBinding.instance!.addObserver(this);
     _initUserData();
     _loadOrderData();
-     determinePosition();
-  //  getCurrentLocation();
+    determinePosition();
+    //  getCurrentLocation();
   }
   _initUserData() async {
     DeliveryBoy user = await AuthController.getUser();
@@ -72,8 +74,8 @@ class _AppScreenState extends State<AppScreen> with WidgetsBindingObserver {
     });
 
     if(deliveryBoy!=null){
-       deliveryBoy = await firestoreServices.checkOrdersIsExistsAndCreate(deliveryBoy!);
-        startLocationUpdate();
+      deliveryBoy = await firestoreServices.checkOrdersIsExistsAndCreate(deliveryBoy!);
+      startLocationUpdate();
     }
 
 
@@ -83,47 +85,47 @@ class _AppScreenState extends State<AppScreen> with WidgetsBindingObserver {
 
   getToken()async{
 
-     final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-     String? fcmToken = await _firebaseMessaging.getToken();
-     log(fcmToken.toString());
+    final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+    String? fcmToken = await _firebaseMessaging.getToken();
+    log(fcmToken.toString());
   }
 
   Future<Position> determinePosition() async {
-  bool serviceEnabled;
-  LocationPermission permission;
+    bool serviceEnabled;
+    LocationPermission permission;
 
-  // Test if location services are enabled.
-  serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) {
-    // Location services are not enabled don't continue
-    // accessing the position and request users of the
-    // App to enable the location services.
-    return Future.error('Location services are disabled.');
-  }
-
-  permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {
-      // Permissions are denied, next time you could try
-      // requesting permissions again (this is also where
-      // Android's shouldShowRequestPermissionRationale
-      // returned true. According to Android guidelines
-      // your App should show an explanatory UI now.
-      return Future.error('Location permissions are denied');
+    // Test if location services are enabled.
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+      // Location services are not enabled don't continue
+      // accessing the position and request users of the
+      // App to enable the location services.
+      return Future.error('Location services are disabled.');
     }
-  }
 
-  if (permission == LocationPermission.deniedForever) {
-    // Permissions are denied forever, handle appropriately.
-    return Future.error(
-      'Location permissions are permanently denied, we cannot request permissions.');
-  }
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        // Permissions are denied, next time you could try
+        // requesting permissions again (this is also where
+        // Android's shouldShowRequestPermissionRationale
+        // returned true. According to Android guidelines
+        // your App should show an explanatory UI now.
+        return Future.error('Location permissions are denied');
+      }
+    }
 
-  // When we reach here, permissions are granted and we can
-  // continue accessing the position of the device.
-  return await Geolocator.getCurrentPosition();
-}
+    if (permission == LocationPermission.deniedForever) {
+      // Permissions are denied forever, handle appropriately.
+      return Future.error(
+          'Location permissions are permanently denied, we cannot request permissions.');
+    }
+
+    // When we reach here, permissions are granted and we can
+    // continue accessing the position of the device.
+    return await Geolocator.getCurrentPosition();
+  }
 
   // Future<Position> getCurrentLocation() async {
   //   // Request permission to access the device's location
@@ -257,13 +259,13 @@ class _AppScreenState extends State<AppScreen> with WidgetsBindingObserver {
                       height: MySize.size3,
                       child: isInProgress
                           ? LinearProgressIndicator(
-                              minHeight: MySize.size3,
-                            )
+                        minHeight: MySize.size3,
+                      )
                           : Container(
-                              height: MySize.size3,
-                            ),
+                        height: MySize.size3,
+                      ),
                     ),
-                 isLoading ?   Container(width: MediaQuery.of(context).size.width,height: MediaQuery.of(context).size.height *0.7,child: Center(child: CircularProgressIndicator(),),)  :   Expanded(
+                    isLoading ?   Container(width: MediaQuery.of(context).size.width,height: MediaQuery.of(context).size.height *0.7,child: Center(child: CircularProgressIndicator(),),)  :   Expanded(
                       child: _buildBody(),
                     ),
                   ],
@@ -291,71 +293,71 @@ class _AppScreenState extends State<AppScreen> with WidgetsBindingObserver {
           children: [
 
             ClipRRect(
-            borderRadius: BorderRadius.all(Radius.circular(MySize.size8!)),
-            child: Container(
-             padding: Spacing.all(16),
-              margin: Spacing.fromLTRB(16, 16, 16, 8),
+              borderRadius: BorderRadius.all(Radius.circular(MySize.size8!)),
+              child: Container(
+                padding: Spacing.all(16),
+                margin: Spacing.fromLTRB(16, 16, 16, 8),
 
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.all(Radius.circular(MySize.size8!)),
-          color: customAppTheme!.bgLayer1,
-          border: Border.all(color: customAppTheme!.bgLayer3, width: 1.5),
-        ),
-              child: Column(
-                children: [
-
-                  Center(
-
-              child: Text(
-              Translator.translate("Admin_Revenue") + " : " +      " " +
-                CurrencyApi.getSign(afterSpace: true) +
-                CurrencyApi.doubleToString(orders!.adminRevenue.toDouble()) +
-                " " ,
-              style: AppTheme.getTextStyle(themeData!.textTheme.caption,
-                  color: themeData!.colorScheme.onBackground,
-                  fontWeight: 800,
-                       fontSize: MySize.size14,
-                  muted: true),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.all(Radius.circular(MySize.size8!)),
+                  color: customAppTheme!.bgLayer1,
+                  border: Border.all(color: customAppTheme!.bgLayer3, width: 1.5),
                 ),
-            ),
-
-            SizedBox(height: 20,),
+                child: Column(
+                  children: [
 
                     Center(
 
-              child: Text(
-              Translator.translate("Shop_Revenue") + " : " +     " " +
-                CurrencyApi.getSign(afterSpace: true) +
-                CurrencyApi.doubleToString(orders!.shopRevenue.toDouble()) +
-                " " ,
-              style: AppTheme.getTextStyle(themeData!.textTheme.caption,
-                  color: themeData!.colorScheme.onBackground,
-                       fontWeight: 800,
-                       fontSize: MySize.size14,
-                  muted: true),
+                      child: Text(
+                        Translator.translate("Admin_Revenue") + " : " +      " " +
+                            CurrencyApi.getSign(afterSpace: true) +
+                            CurrencyApi.doubleToString(orders!.adminRevenue.toDouble()) +
+                            " " ,
+                        style: AppTheme.getTextStyle(themeData!.textTheme.caption,
+                            color: themeData!.colorScheme.onBackground,
+                            fontWeight: 800,
+                            fontSize: MySize.size14,
+                            muted: true),
+                      ),
+                    ),
+
+                    SizedBox(height: 20,),
+
+                    Center(
+
+                      child: Text(
+                        Translator.translate("Shop_Revenue") + " : " +     " " +
+                            CurrencyApi.getSign(afterSpace: true) +
+                            CurrencyApi.doubleToString(orders!.shopRevenue.toDouble()) +
+                            " " ,
+                        style: AppTheme.getTextStyle(themeData!.textTheme.caption,
+                            color: themeData!.colorScheme.onBackground,
+                            fontWeight: 800,
+                            fontSize: MySize.size14,
+                            muted: true),
+                      ),
+                    ),
+                    SizedBox(height: 20,),
+
+                    Center(
+
+                      child: Text(
+                        Translator.translate("delivery_rev") + " : " +      " " +
+                            CurrencyApi.getSign(afterSpace: true) +
+                            CurrencyApi.doubleToString(orders!.deliveryRevenue.toDouble()) +
+                            " " ,
+                        style: AppTheme.getTextStyle(themeData!.textTheme.caption,
+                            color: themeData!.colorScheme.onBackground,
+
+                            fontWeight: 800,
+                            fontSize: MySize.size14,
+                            muted: true),
+                      ),
+                    ),
+                  ],
                 ),
-            ),
-            SizedBox(height: 20,),
-
-                                Center(
-
-              child: Text(
-              Translator.translate("delivery_rev") + " : " +      " " +
-                CurrencyApi.getSign(afterSpace: true) +
-                CurrencyApi.doubleToString(orders!.deliveryRevenue.toDouble()) +
-                " " ,
-              style: AppTheme.getTextStyle(themeData!.textTheme.caption,
-                  color: themeData!.colorScheme.onBackground,
-
-                    fontWeight: 800,
-                       fontSize: MySize.size14,
-                  muted: true),
-                ),
-            ),
-                ],
               ),
             ),
-          ),
 
 
 
@@ -372,7 +374,7 @@ class _AppScreenState extends State<AppScreen> with WidgetsBindingObserver {
             ),
             _getActiveOrderView(orders!.currentOrders!),
 
-             Container(
+            Container(
               margin: Spacing.fromLTRB(16, 8, 16, 8),
               child: Text(
                 Translator.translate("pending"),
@@ -408,23 +410,34 @@ class _AppScreenState extends State<AppScreen> with WidgetsBindingObserver {
         children: [
           Center(
               child: Text(
-            Translator.translate("there_is_no_order_yet"),
-            style: AppTheme.getTextStyle(themeData!.textTheme.bodyText2,
-                color: themeData!.colorScheme.onBackground, fontWeight: 600),
-          ))
+                Translator.translate("there_is_no_order_yet"),
+                style: AppTheme.getTextStyle(themeData!.textTheme.bodyText2,
+                    color: themeData!.colorScheme.onBackground, fontWeight: 600),
+              ))
         ],
       );
     }
   }
 
   _getActiveOrderView( orders) {
-    for (int i = 0; i < orders.length; i++) {
-      if (AllOrders.checkIsActiveOrder(orders[i].status)) {
-        return Container(
-            margin: Spacing.horizontal(16),
-            child: _singleOrderItem(order: orders[i], activeOrder: true));
-      }
-    }
+   return SizedBox(width: 500,height: 300,
+    child: ListView.builder(
+      itemCount: orders.length,
+      itemBuilder:
+    (context, index) {
+      if (AllOrders.checkIsActiveOrder(orders[index].status)) {
+            return Container(
+                margin: Spacing.horizontal(16),
+                child: _singleOrderItem(order: orders[index], activeOrder: true));
+    }},)
+      ,);
+    // for (int i = 0; i < orders.length; i++) {
+    //   if (AllOrders.checkIsActiveOrder(orders[i].status)) {
+    //     return Container(
+    //         margin: Spacing.horizontal(16),
+    //         child: _singleOrderItem(order: orders[i], activeOrder: true));
+    //   }
+    // }
     return Container(
       margin: Spacing.all(16),
       child: Center(
@@ -463,34 +476,37 @@ class _AppScreenState extends State<AppScreen> with WidgetsBindingObserver {
   }
 
 
-bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
+  bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
 
-  return scheduled.isAfter(now) || scheduled.isAtSameMomentAs(now);
-}
+print('scheduled');
+print(scheduled);
+print(DateTime);
+    return scheduled.isAfter(now) || scheduled.isAtSameMomentAs(now);//false
+  }
 
-    _getPendingOrderView( orders) {
+  _getPendingOrderView( orders) {
     List<Widget> listViews = [];
     for (int i = 0; i < orders.length; i++) {
       if (!AllOrders.checkIsActiveOrder(orders[i].status) ) {
-       dynamic scheduleDate=null;
+        dynamic scheduleDate=null;
 
-       if(orders[i].orderTime!=null){
-        scheduleDate = DateFormat('dd-MM-yyyy - HH:mm').parse(orders[i].orderTime["order_date"] + " - " + orders[i].orderTime["order_time"]);
-       }
+        if(orders[i].orderTime!=null){
+          scheduleDate = DateFormat('dd-MM-yyyy - HH:mm').parse(orders[i].orderTime["order_date"] + " - " + orders[i].orderTime["order_time"]);
+        }
 
         if(orders[i].orderTime == null || isDateAfterOrEqual(DateTime.now(),scheduleDate ,)){
 
 
-        listViews.add(InkWell(
-          onTap: () async {
-            if (AllOrders.checkStatusDelivered(orders[i].status)) {
-            } else if (AllOrders.checkStatusReviewed(orders[i].status)) {
-            } else {
+          listViews.add(InkWell(
+            onTap: () async {
+              if (AllOrders.checkStatusDelivered(orders[i].status)) {
+              } else if (AllOrders.checkStatusReviewed(orders[i].status)) {
+              } else {
 
-            }
-          },
-          child: _singlePendingOrderItem(order: orders[i]),
-        ));
+              }
+            },
+            child: _singlePendingOrderItem(order: orders[i]),
+          ));
         }
       }
     }
@@ -528,12 +544,12 @@ bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
               width: width,
               child: Center(
                   child: Text(
-                "+" + (order.carts.length - 2).toString(),
-                style: AppTheme.getTextStyle(themeData!.textTheme.subtitle1,
-                    letterSpacing: 0.5,
-                    color: themeData!.colorScheme.onBackground,
-                    fontWeight: 600),
-              )),
+                    "+" + (order.carts.length - 2).toString(),
+                    style: AppTheme.getTextStyle(themeData!.textTheme.subtitle1,
+                        letterSpacing: 0.5,
+                        color: themeData!.colorScheme.onBackground,
+                        fontWeight: 600),
+                  )),
             ),
           ),
         );
@@ -547,32 +563,32 @@ bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
               borderRadius: BorderRadius.all(Radius.circular(MySize.size8!)),
               child: order.carts[i].product!.productImages!.length != 0
                   ? Image.network(
-                      order.carts[i].product!.productImages![0].url!,
-                      loadingBuilder: (BuildContext ctx, Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child;
-                        } else {
-                          return LoadingScreens.getSimpleImageScreen(
-                              context, themeData, customAppTheme!,
-                              width: MySize.size90, height: MySize.size90);
-                        }
-                      },
-                      height: width,
-                      width: width,
-                      fit: BoxFit.cover,
-                    )
+                order.carts[i].product!.productImages![0].url!,
+                loadingBuilder: (BuildContext ctx, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  } else {
+                    return LoadingScreens.getSimpleImageScreen(
+                        context, themeData, customAppTheme!,
+                        width: MySize.size90, height: MySize.size90);
+                  }
+                },
+                height: width,
+                width: width,
+                fit: BoxFit.cover,
+              )
                   : Image.asset(
-                      Product.getPlaceholderImage(),
-                      height: MySize.size90,
-                      fit: BoxFit.fill,
-                    ),
+                Product.getPlaceholderImage(),
+                height: MySize.size90,
+                fit: BoxFit.fill,
+              ),
             ),
           ),
         ));
       }
     }
-//***********************************
+
     return InkWell(
       onTap: () async {
         if (activeOrder) {
@@ -582,7 +598,6 @@ bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
               builder: (BuildContext context) => SingleOrderScreen(
                 order: order,
 
-
               ),
             ),
           );
@@ -591,7 +606,7 @@ bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
             if (locationPermission == LocationPermission.denied) {
               showMessage(
                   message:
-                      Translator.translate("please_give_location_permission"));
+                  Translator.translate("please_give_location_permission"));
             } else if (locationPermission == LocationPermission.deniedForever) {
               Geolocator.openAppSettings();
               showMessage(
@@ -641,10 +656,10 @@ bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
 
 
 
-                       Container(
+                      Container(
                         margin: Spacing.only(top: 4),
                         child: Text(
-                        Translator.translate("admin_will_take") +" " + CurrencyApi.getSign(afterSpace: true) + CurrencyApi.doubleToString(order.total-order.deliveryFee.toDouble()),
+                          Translator.translate("admin_will_take") +" " + CurrencyApi.getSign(afterSpace: true) + CurrencyApi.doubleToString(order.total-order.deliveryFee.toDouble()),
                           style: AppTheme.getTextStyle(
                               themeData!.textTheme.bodyText2,
                               fontWeight: 600,
@@ -657,7 +672,7 @@ bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
                   padding: Spacing.fromLTRB(12, 8, 12, 8),
                   decoration: BoxDecoration(
                       borderRadius:
-                          BorderRadius.all(Radius.circular(MySize.size4)),
+                      BorderRadius.all(Radius.circular(MySize.size4)),
                       color: customAppTheme!.bgLayer3),
                   child: Text(
                     AllOrders.getTextFromOrderStatus(order.status).toUpperCase(),
@@ -686,56 +701,56 @@ bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
             ),
             order.deliveryBoyReview != null
                 ? Container(
-                    margin:Spacing.top(8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              margin:Spacing.top(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: Spacing.fromLTRB(0,8,0,8),
+                    child: Row(
                       children: [
+                        Generator.buildRatingStar(
+                            activeColor: ColorUtils.getColorFromRating(
+                                order.deliveryBoyReview!.rating,
+                                customAppTheme,
+                                themeData),
+                            inactiveColor: themeData!
+                                .colorScheme.onBackground
+                                .withAlpha(60),
+                            rating:
+                            order.deliveryBoyReview!.rating!.toDouble(),
+                            spacing: 0,
+                            inactiveStarFilled: true),
                         Container(
-                          margin: Spacing.fromLTRB(0,8,0,8),
-                          child: Row(
-                            children: [
-                              Generator.buildRatingStar(
-                                  activeColor: ColorUtils.getColorFromRating(
-                                      order.deliveryBoyReview!.rating,
-                                      customAppTheme,
-                                      themeData),
-                                  inactiveColor: themeData!
-                                      .colorScheme.onBackground
-                                      .withAlpha(60),
-                                  rating:
-                                      order.deliveryBoyReview!.rating!.toDouble(),
-                                  spacing: 0,
-                                  inactiveStarFilled: true),
-                              Container(
-                                margin: Spacing.left(8),
-                                child: Text(
-                                  Generator.convertDateTimeToText(
-                                      order.deliveryBoyReview!.createdAt!,
-                                      showDate: true,
-                                      showTime: false),
-                                  style: AppTheme.getTextStyle(
-                                      themeData!.textTheme.caption,
-                                      fontSize: 12,
-                                      fontWeight: 600,
-                                      xMuted: true),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        order.deliveryBoyReview!.review!=null ? Container(
-
+                          margin: Spacing.left(8),
                           child: Text(
-                            order.deliveryBoyReview!.review!,
+                            Generator.convertDateTimeToText(
+                                order.deliveryBoyReview!.createdAt!,
+                                showDate: true,
+                                showTime: false),
                             style: AppTheme.getTextStyle(
                                 themeData!.textTheme.caption,
-                                color: themeData!.colorScheme.onBackground,
-                                fontWeight: 500),
+                                fontSize: 12,
+                                fontWeight: 600,
+                                xMuted: true),
                           ),
-                        ):Container(),
+                        )
                       ],
                     ),
-                  )
+                  ),
+                  order.deliveryBoyReview!.review!=null ? Container(
+
+                    child: Text(
+                      order.deliveryBoyReview!.review!,
+                      style: AppTheme.getTextStyle(
+                          themeData!.textTheme.caption,
+                          color: themeData!.colorScheme.onBackground,
+                          fontWeight: 500),
+                    ),
+                  ):Container(),
+                ],
+              ),
+            )
                 : Container(),
             Container(
               alignment: Alignment.centerRight,
@@ -755,61 +770,61 @@ bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
             Row(
               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
               children: [
-              InkWell(
-                onTap: () {
+                InkWell(
+                  onTap: () {
 
-                 isLoading=true;
-                 setState(() {
-
-                 });
-                  OrderController.acceptRefuseOrder(order.id,status: 4).then((value) {
-                  isLoading=false;
-                    _refresh();
+                    isLoading=true;
                     setState(() {
 
                     });
-                  });
-                },
-                child:Container(
-                  width: 80,
-                  height: 30,
-                  decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.grey.withOpacity(0.2)),
-                  child: Center(child: Text(Translator.translate("Accept"),style: TextStyle(fontWeight: FontWeight.bold,color: Colors.green),))) ,
-              ),
-               InkWell(
-                onTap: () {
-                 isLoading=true;
-                 setState(() {
+                    OrderController.acceptRefuseOrder(order.id,status: 4).then((value) {
+                      isLoading=false;
+                      _refresh();
+                      setState(() {
 
-                 });
-                  OrderController.acceptRefuseOrder(order.id,status: -2).then((value) {
-               isLoading=false;
-                 setState(() {
+                      });
+                    });
+                  },
+                  child:Container(
+                      width: 80,
+                      height: 30,
+                      decoration: BoxDecoration(borderRadius: BorderRadius.circular(10),color: Colors.grey.withOpacity(0.2)),
+                      child: Center(child: Text(Translator.translate("Accept"),style: TextStyle(fontWeight: FontWeight.bold,color: Colors.green),))) ,
+                ),
+                InkWell(
+                  onTap: () {
+                    isLoading=true;
+                    setState(() {
 
-                 });
-                    _refresh();
+                    });
+                    OrderController.acceptRefuseOrder(order.id,status: -2).then((value) {
+                      isLoading=false;
+                      setState(() {
 
-                  });
-                },
-                child:Text(Translator.translate("Decline"),style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red),) ,
-              ),
-              InkWell(
-                onTap: () {
-                 // log(order.status.toString());
-                 Navigator.push(
-            context,
-            MaterialPageRoute(
-              builder: (BuildContext context) => SingleOrderScreen(
-                order: order,
+                      });
+                      _refresh();
+
+                    });
+                  },
+                  child:Text(Translator.translate("Decline"),style: TextStyle(fontWeight: FontWeight.bold,color: Colors.red),) ,
+                ),
+                InkWell(
+                  onTap: () {
+                    // log(order.status.toString());
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (BuildContext context) => SingleOrderScreen(
+                          order: order,
 
 
-              ),
-            ),
-          );
-                },
-                child:Text(Translator.translate("view"),style: TextStyle(fontWeight: FontWeight.bold,color: Colors.grey),) ,
-              ),
-            ],)
+                        ),
+                      ),
+                    );
+                  },
+                  child:Text(Translator.translate("view"),style: TextStyle(fontWeight: FontWeight.bold,color: Colors.grey),) ,
+                ),
+              ],)
           ],
         ),
       ),
@@ -832,12 +847,12 @@ bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
               width: width,
               child: Center(
                   child: Text(
-                "+" + (order.carts.length - 2).toString(),
-                style: AppTheme.getTextStyle(themeData!.textTheme.subtitle1,
-                    letterSpacing: 0.5,
-                    color: themeData!.colorScheme.onBackground,
-                    fontWeight: 600),
-              )),
+                    "+" + (order.carts.length - 2).toString(),
+                    style: AppTheme.getTextStyle(themeData!.textTheme.subtitle1,
+                        letterSpacing: 0.5,
+                        color: themeData!.colorScheme.onBackground,
+                        fontWeight: 600),
+                  )),
             ),
           ),
         );
@@ -851,26 +866,26 @@ bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
               borderRadius: BorderRadius.all(Radius.circular(MySize.size8!)),
               child: order.carts[i].product!.productImages!.length != 0
                   ? Image.network(
-                      order.carts[i].product!.productImages![0].url!,
-                      loadingBuilder: (BuildContext ctx, Widget child,
-                          ImageChunkEvent? loadingProgress) {
-                        if (loadingProgress == null) {
-                          return child;
-                        } else {
-                          return LoadingScreens.getSimpleImageScreen(
-                              context, themeData, customAppTheme!,
-                              width: MySize.size90, height: MySize.size90);
-                        }
-                      },
-                      height: width,
-                      width: width,
-                      fit: BoxFit.cover,
-                    )
+                order.carts[i].product!.productImages![0].url!,
+                loadingBuilder: (BuildContext ctx, Widget child,
+                    ImageChunkEvent? loadingProgress) {
+                  if (loadingProgress == null) {
+                    return child;
+                  } else {
+                    return LoadingScreens.getSimpleImageScreen(
+                        context, themeData, customAppTheme!,
+                        width: MySize.size90, height: MySize.size90);
+                  }
+                },
+                height: width,
+                width: width,
+                fit: BoxFit.cover,
+              )
                   : Image.asset(
-                      Product.getPlaceholderImage(),
-                      height: MySize.size90,
-                      fit: BoxFit.fill,
-                    ),
+                Product.getPlaceholderImage(),
+                height: MySize.size90,
+                fit: BoxFit.fill,
+              ),
             ),
           ),
         ));
@@ -895,7 +910,7 @@ bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
             if (locationPermission == LocationPermission.denied) {
               showMessage(
                   message:
-                      Translator.translate("please_give_location_permission"));
+                  Translator.translate("please_give_location_permission"));
             } else if (locationPermission == LocationPermission.deniedForever) {
               Geolocator.openAppSettings();
               showMessage(
@@ -943,10 +958,10 @@ bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
                         ),
                       ),
 
-                       Container(
+                      Container(
                         margin: Spacing.only(top: 4),
                         child: Text(
-                        Translator.translate("admin_will_take") +" " + CurrencyApi.getSign(afterSpace: true) + CurrencyApi.doubleToString(order.total-order.deliveryFee.toDouble()),
+                          Translator.translate("admin_will_take") +" " + CurrencyApi.getSign(afterSpace: true) + CurrencyApi.doubleToString(order.total-order.deliveryFee.toDouble()),
                           style: AppTheme.getTextStyle(
                               themeData!.textTheme.bodyText2,
                               fontWeight: 600,
@@ -959,7 +974,7 @@ bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
                   padding: Spacing.fromLTRB(12, 8, 12, 8),
                   decoration: BoxDecoration(
                       borderRadius:
-                          BorderRadius.all(Radius.circular(MySize.size4)),
+                      BorderRadius.all(Radius.circular(MySize.size4)),
                       color: customAppTheme!.bgLayer3),
                   child: Text(
                     AllOrders.getTextFromOrderStatus(order.status).toUpperCase(),
@@ -988,56 +1003,56 @@ bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
             ),
             order.deliveryBoyReview != null
                 ? Container(
-                    margin:Spacing.top(8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+              margin:Spacing.top(8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: Spacing.fromLTRB(0,8,0,8),
+                    child: Row(
                       children: [
+                        Generator.buildRatingStar(
+                            activeColor: ColorUtils.getColorFromRating(
+                                order.deliveryBoyReview!.rating,
+                                customAppTheme,
+                                themeData),
+                            inactiveColor: themeData!
+                                .colorScheme.onBackground
+                                .withAlpha(60),
+                            rating:
+                            order.deliveryBoyReview!.rating!.toDouble(),
+                            spacing: 0,
+                            inactiveStarFilled: true),
                         Container(
-                          margin: Spacing.fromLTRB(0,8,0,8),
-                          child: Row(
-                            children: [
-                              Generator.buildRatingStar(
-                                  activeColor: ColorUtils.getColorFromRating(
-                                      order.deliveryBoyReview!.rating,
-                                      customAppTheme,
-                                      themeData),
-                                  inactiveColor: themeData!
-                                      .colorScheme.onBackground
-                                      .withAlpha(60),
-                                  rating:
-                                      order.deliveryBoyReview!.rating!.toDouble(),
-                                  spacing: 0,
-                                  inactiveStarFilled: true),
-                              Container(
-                                margin: Spacing.left(8),
-                                child: Text(
-                                  Generator.convertDateTimeToText(
-                                      order.deliveryBoyReview!.createdAt!,
-                                      showDate: true,
-                                      showTime: false),
-                                  style: AppTheme.getTextStyle(
-                                      themeData!.textTheme.caption,
-                                      fontSize: 12,
-                                      fontWeight: 600,
-                                      xMuted: true),
-                                ),
-                              )
-                            ],
-                          ),
-                        ),
-                        order.deliveryBoyReview!.review!=null ? Container(
-
+                          margin: Spacing.left(8),
                           child: Text(
-                            order.deliveryBoyReview!.review!,
+                            Generator.convertDateTimeToText(
+                                order.deliveryBoyReview!.createdAt!,
+                                showDate: true,
+                                showTime: false),
                             style: AppTheme.getTextStyle(
                                 themeData!.textTheme.caption,
-                                color: themeData!.colorScheme.onBackground,
-                                fontWeight: 500),
+                                fontSize: 12,
+                                fontWeight: 600,
+                                xMuted: true),
                           ),
-                        ):Container(),
+                        )
                       ],
                     ),
-                  )
+                  ),
+                  order.deliveryBoyReview!.review!=null ? Container(
+
+                    child: Text(
+                      order.deliveryBoyReview!.review!,
+                      style: AppTheme.getTextStyle(
+                          themeData!.textTheme.caption,
+                          color: themeData!.colorScheme.onBackground,
+                          fontWeight: 500),
+                    ),
+                  ):Container(),
+                ],
+              ),
+            )
                 : Container(),
             Container(
               alignment: Alignment.centerRight,
@@ -1074,3 +1089,4 @@ bool isDateAfterOrEqual(DateTime scheduled, DateTime now) {
     );
   }
 }
+

@@ -20,7 +20,7 @@ enum AuthType { VERIFIED, LOGIN, NOT_FOUND }
 class AuthController {
   /*-----------------   Log In     ----------------------*/
 
-  static Future<MyResponse> loginUser(String email, String password) async {
+  static Future<MyResponse> loginUser(String phone, String password) async {
     //Get FCM
     PushNotificationsManager pushNotificationsManager =
         PushNotificationsManager();
@@ -28,9 +28,9 @@ class AuthController {
     String? fcmToken = await pushNotificationsManager.getToken();
 
     String loginUrl = ApiUtil.MAIN_API_URL + ApiUtil.AUTH_LOGIN;
-    log("mobile: " +email.toString());
+    log("ss: " +phone.toString());
     //Body data
-    Map data = {'email': email, 'password': password, 'fcm_token': fcmToken};
+    Map data = {'email': phone, 'password': password, 'fcm_token': fcmToken};
 
     //Encode
     String body = json.encode(data);
@@ -62,10 +62,15 @@ class AuthController {
         await sharedPreferences.setString('token', token);
 
         myResponse.success = true;
-      } else {
+      }
+      else {
+        log('d'+ myResponse.toString() );
+        log('d'+ body);
+        log("nir");
         Map<String, dynamic> data = json.decode(response.body!);
         myResponse.success = false;
         myResponse.setError(data);
+        log(myResponse.setError(data).toString());
       }
 
       return myResponse;
