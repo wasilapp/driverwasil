@@ -4,6 +4,7 @@ import 'package:DeliveryBoyApp/models/MyResponse.dart';
 import 'package:DeliveryBoyApp/services/AppLocalizations.dart';
 import 'package:DeliveryBoyApp/utils/SizeConfig.dart';
 import 'package:DeliveryBoyApp/utils/UrlUtils.dart';
+import 'package:DeliveryBoyApp/views/order/order_view.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -62,18 +63,20 @@ class _MaintenanceScreenState extends State<MaintenanceScreen> {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => AppScreen(),
+            builder: (BuildContext context) => HomeScreen(),
           ),
         );
-      } else if (authType == AuthType.LOGIN) {
-        Navigator.pushAndRemoveUntil(
-          context,
-          MaterialPageRoute(
-            builder: (BuildContext context) => OTPVerificationScreen(),
-          ),
-              (route) => false,
-        );
-      } else {
+      }
+      // else if (authType == AuthType.LOGIN) {
+      //   Navigator.pushAndRemoveUntil(
+      //     context,
+      //     MaterialPageRoute(
+      //       builder: (BuildContext context) => OTPVerificationScreen(),
+      //     ),
+      //         (route) => false,
+      //   );
+      // }
+      else {
         Navigator.pushReplacement(
           context,
           MaterialPageRoute(

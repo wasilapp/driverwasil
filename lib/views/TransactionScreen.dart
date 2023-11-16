@@ -7,11 +7,15 @@ import 'package:DeliveryBoyApp/services/AppLocalizations.dart';
 import 'package:DeliveryBoyApp/utils/SizeConfig.dart';
 import 'package:DeliveryBoyApp/views/LoadingScreens.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:get/get_core/src/get_main.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../AppTheme.dart';
 import '../AppThemeNotifier.dart';
+import '../utils/colors.dart';
+import 'auth/authControllernew.dart';
 
 class TransactionScreen extends StatefulWidget {
   @override
@@ -31,6 +35,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
 
   final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
       new GlobalKey<RefreshIndicatorState>();
+  AuthControllerr authControllerr=Get.put(AuthControllerr());
 
   //Other Variables
   bool isInProgress = false;
@@ -62,8 +67,8 @@ class _TransactionScreenState extends State<TransactionScreen> {
       totalPayToAdmin = TransactionController.getTotalPayToAdmin(transactions!);
       totalTakeFromAdmin = TransactionController.getTotalTakeFromAdmin(transactions!);
     } else {
-      ApiUtil.checkRedirectNavigation(context, myResponse.responseCode);
-      showMessage(message: myResponse.errorText);
+      //ApiUtil.checkRedirectNavigation(context, myResponse.responseCode);
+     //showMessage(message: myResponse.errorText);
     }
 
     if(mounted) {
@@ -79,11 +84,7 @@ class _TransactionScreenState extends State<TransactionScreen> {
         int themeMode = value.themeMode();
         themeData = AppTheme.getThemeFromThemeMode(themeMode);
         customAppTheme = AppTheme.getCustomAppTheme(themeMode);
-        return MaterialApp(
-          scaffoldMessengerKey: _scaffoldMessengerKey,
-          debugShowCheckedModeBanner: false,
-          theme: AppTheme.getThemeFromThemeMode(value.themeMode()),
-          home: Scaffold(
+        return Scaffold(
               key: _scaffoldKey,
               backgroundColor: customAppTheme.bgLayer1,
               appBar: AppBar(
@@ -103,30 +104,123 @@ class _TransactionScreenState extends State<TransactionScreen> {
                       fontWeight: 600),
                 ),
               ),
-              body: RefreshIndicator(
-                onRefresh: _refresh,
-                backgroundColor: customAppTheme.bgLayer1,
-                color: themeData.colorScheme.primary,
-                key: _refreshIndicatorKey,
-                child: Column(
-                  children: [
-                    Container(
-                      height: MySize.size3,
-                      child: isInProgress
-                          ? LinearProgressIndicator(
-                              minHeight: MySize.size3,
-                            )
-                          : Container(
-                              height: MySize.size3,
+              body: Stack(
+                children: [
+                  RefreshIndicator(
+                    onRefresh: _refresh,
+                    backgroundColor: customAppTheme.bgLayer1,
+                    color: themeData.colorScheme.primary,
+                    key: _refreshIndicatorKey,
+                    child: Column(
+                      children: [
+                        Container(
+                          height: MySize.size3,
+                          child: isInProgress
+                              ? LinearProgressIndicator(
+                                  minHeight: MySize.size3,
+                                )
+                              : Container(
+                                  height: MySize.size3,
+                                ),
+                        ),
+                        Expanded(
+                          child: _buildBody(),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Container(
+                    height: 100,
+                    width: double.infinity,
+
+                    padding: EdgeInsets.all(8),
+                    child: Column(
+                      children: [
+                        Row(
+                          children: [
+                            Expanded(
+                              child: Container(
+
+                                margin:EdgeInsets.symmetric(horizontal: 6),
+                                decoration: BoxDecoration(
+                                    color: primaryColor.withOpacity(.3),
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+
+                                  children: [
+                                    Text('Total Capacity'),
+                                    Text('${authControllerr.boysDeliveryData?.data?.deliveryBoy?.totalCapacity}'),
+
+                                  ],
+                                ),
+                              ),
                             ),
+                            Expanded(
+                              child: Container(
+                                margin:EdgeInsets.symmetric(horizontal: 6),
+                                decoration: BoxDecoration(
+                                    color: primaryColor.withOpacity(.3),
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+
+                                  children: [
+                                    Text('Total Quantity'),
+                                    Text('${authControllerr.boysDeliveryData?.data?.deliveryBoy?.totalQuantity}'),
+
+
+                                  ],
+                                ),
+                              ),
+                            )
+                            ,
+                            Expanded(
+                              child: Container(
+                                margin:EdgeInsets.symmetric(horizontal: 6),
+                                decoration: BoxDecoration(
+                                    color: primaryColor.withOpacity(.3),
+                                    borderRadius: BorderRadius.circular(10)
+                                ),
+                                child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                                  children: [
+                                    Text('Available Quantity'),
+                                    Text('${authControllerr.boysDeliveryData?.data?.deliveryBoy?.availableQuantity}'),
+
+
+                                  ],
+                                ),
+                              ),
+                            )
+                            ,
+                          ],
+                        ),
+                        Container(
+width: double.infinity,
+                          margin:EdgeInsets.symmetric(horizontal: 16,vertical: 4),
+                          padding: EdgeInsets.all(4),
+                          decoration: BoxDecoration(
+                              color: primaryColor.withOpacity(.3),
+                              borderRadius: BorderRadius.circular(10)
+                          ),
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.spaceAround,
+
+                            children: [
+                              Text('Total Order'),
+                              Text('${authControllerr.boysDeliveryData?.data?.deliveryBoy?.totalOrder??0}'),
+
+                            ],
+                          ),
+                        ),
+                      ],
                     ),
-                    Expanded(
-                      child: _buildBody(),
-                    ),
-                  ],
-                ),
-              )),
-        );
+                  ),
+                ],
+              ));
       },
     );
   }

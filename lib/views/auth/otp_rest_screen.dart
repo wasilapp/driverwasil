@@ -204,12 +204,12 @@ class _OTPForRestScreenState extends State<OTPForRestScreen> {
             debugShowCheckedModeBanner: false,
             theme: AppTheme.getThemeFromThemeMode(value.themeMode()),
             home: Scaffold(
-              // appBar: AppBar(
-              //   elevation: 0,
-              //   centerTitle: true,
-              //   title: Text("OTP Verification",
-              //       style: themeData.appBarTheme.textTheme!.headline6),
-              // ),
+              appBar: AppBar(
+                elevation: 0,
+                centerTitle: true,
+                title: Text("OTP Verification",
+                   ),
+              ),
                 body: Container(
                   margin: Spacing.all(16),
                   child: Column(

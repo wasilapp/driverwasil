@@ -18,6 +18,7 @@ import '../../utils/SizeConfig.dart';
 import '../../utils/fonts.dart';
 import '../../utils/navigator.dart';
 import '../../utils/text_field.dart';
+import '../../utils/ui/textfeild.dart';
 import 'LoginScreen.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
@@ -176,7 +177,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           controller: passwordTFController! ,
                           isPassword:showPassword ,
                           hintText: Translator.translate("password"),
-                          prefixIconData: Icons.lock,
+                          prefixIconData:Icon( Icons.lock),
                           onPrefixIconPress: () {
                             setState(() {
                               showPassword = !showPassword;
@@ -192,7 +193,7 @@ class _ResetPasswordScreenState extends State<ResetPasswordScreen> {
                           controller: confirmPasswordTFController! ,
                           isPassword:showPassword ,
                           hintText: Translator.translate("confirm_password"),
-                          prefixIconData: Icons.lock,
+                          prefixIconData:Icon( Icons.lock),
                           onPrefixIconPress: () {
                             setState(() {
                               showPassword = !showPassword;

@@ -7,8 +7,8 @@ class FirestoreServices {
   final CollectionReference collection =
       FirebaseFirestore.instance.collection('drivers');
 
-  Future<DeliveryBoy> checkOrdersIsExistsAndCreate(
-      DeliveryBoy deliveryBoy) async {
+  Future<DeliveryBoyModel> checkOrdersIsExistsAndCreate(
+      DeliveryBoyModel deliveryBoy) async {
     log("checking");
 
     try {
@@ -26,12 +26,12 @@ class FirestoreServices {
     return deliveryBoy;
   }
 
-  Future<DocumentReference> addDelivery(DeliveryBoy deliveryBoy,
+  Future<DocumentReference> addDelivery(DeliveryBoyModel deliveryBoy,
       {double lat = 0.0, double long = 0.0}) {
-    return collection.add(deliveryBoy.toMap());
+    return collection.add(deliveryBoy.toJson());
   }
 
-  updateLatLong(DeliveryBoy deliveryBoy,
+  updateLatLong(DeliveryBoyModel deliveryBoy,
       {double lat = 0.0, double long = 0.0}) async {
     var ds = await collection.where("id", isEqualTo: deliveryBoy.id).get();
     await collection.doc(ds.docs.first.id).update({
@@ -40,7 +40,7 @@ class FirestoreServices {
     });
   }
 
-  updateIsOffline(DeliveryBoy deliveryBoy, bool isOffline) async {
+  updateIsOffline(DeliveryBoyModel deliveryBoy, bool isOffline) async {
     var ds = await collection.where("id", isEqualTo: deliveryBoy.id).get();
     await collection.doc(ds.docs.first.id).update({
       "isOffline": isOffline,

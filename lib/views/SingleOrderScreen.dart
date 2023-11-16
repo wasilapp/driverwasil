@@ -12,6 +12,7 @@ import 'package:DeliveryBoyApp/utils/SizeConfig.dart';
 import 'package:DeliveryBoyApp/utils/UrlUtils.dart';
 import 'package:DeliveryBoyApp/views/AppScreen.dart';
 import 'package:DeliveryBoyApp/views/OrderOTPDialog.dart';
+import 'package:DeliveryBoyApp/views/order/order_view.dart';
 import 'package:flutter/services.dart' show rootBundle;
 import 'package:flutter/material.dart';
 import 'package:geolocator/geolocator.dart';
@@ -795,7 +796,7 @@ class _SingleOrderScreenState extends State<SingleOrderScreen> {
                        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => AppScreen(),
+            builder: (BuildContext context) => HomeScreen(),
           ),
         );
 
@@ -921,7 +922,7 @@ style: ButtonStyle(
                        Navigator.pushReplacement(
           context,
           MaterialPageRoute(
-            builder: (BuildContext context) => AppScreen(),
+            builder: (BuildContext context) => HomeScreen(),
           ),
         );
 

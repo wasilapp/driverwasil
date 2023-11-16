@@ -13,7 +13,7 @@ class AppData{
   int minBuildVersion;
   String paymentMethod;
 
-  DeliveryBoy? deliveryBoy;
+  DeliveryBoyModel? deliveryBoy;
 
   AppData(this.minBuildVersion,this.paymentMethod,this.deliveryBoy);
 
@@ -25,9 +25,9 @@ class AppData{
     String supportPayments = appDataObject['support_payments'].toString();
     supportedPayments = supportPayments;
 
-    DeliveryBoy? deliveryBoy;
-    if(jsonObject['delivery_boy']!=null){
-      deliveryBoy = DeliveryBoy.fromJson(jsonObject['delivery_boy'],deliveryBoy!.type!.toString());
+    DeliveryBoyModel? deliveryBoy;
+    if(jsonObject['deliveryBoy']!=null){
+      deliveryBoy = DeliveryBoyModel.fromJson(jsonObject['deliveryBoy'],);
     }
 
     return AppData(minBuildVersion,supportPayments,deliveryBoy);

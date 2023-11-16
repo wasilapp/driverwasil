@@ -22,7 +22,7 @@ class ApiUtil {
 
 
 
-//   url= https://wasiljo.com/public/api/v1/delivery-boy/
+//   url= https://wasiljo.com/public/api/v1/delivery-boy/change_status/
 // url login=  https://wasiljo.com/public/api/v1/delivery-boy/login/
   /*------------ For Production server ----------------------*/
 
@@ -122,7 +122,7 @@ class ApiUtil {
   static const String REVENUES = "revenues/";
 
   //Transactions
-  static const String Transactions = "transactions/";
+  static const String Transactions = "api/v1/delivery-boy/get_transaction_order";
 
   //shop
   // static const String SHOP = "shop/";

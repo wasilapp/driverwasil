@@ -4,6 +4,7 @@ import 'dart:io';
 
 import 'package:DeliveryBoyApp/AppTheme.dart';
 import 'package:DeliveryBoyApp/api/api_util.dart';
+import 'package:DeliveryBoyApp/main.dart';
 import 'package:DeliveryBoyApp/models/DeliveryBoy.dart';
 import 'package:DeliveryBoyApp/models/MyResponse.dart';
 import 'package:DeliveryBoyApp/services/Network.dart';
@@ -19,18 +20,18 @@ enum AuthType { VERIFIED, LOGIN, NOT_FOUND }
 
 class AuthController {
   /*-----------------   Log In     ----------------------*/
-
-  static Future<MyResponse> loginUser(String phone, String password) async {
+  static DeliveryBoyModel? boysData;
+  static Future<MyResponse> loginUser(String email, String password) async {
     //Get FCM
     PushNotificationsManager pushNotificationsManager =
-        PushNotificationsManager();
+    PushNotificationsManager();
     await pushNotificationsManager.init();
     String? fcmToken = await pushNotificationsManager.getToken();
 
     String loginUrl = ApiUtil.MAIN_API_URL + ApiUtil.AUTH_LOGIN;
-    log("ss: " +phone.toString());
+    log("mobile: " +email.toString());
     //Body data
-    Map data = {'email': phone, 'password': password, 'fcm_token': fcmToken};
+    Map data = {'email': email, 'password': password, 'fcm_token': fcmToken};
 
     //Encode
     String body = json.encode(data);
@@ -50,42 +51,38 @@ class AuthController {
       MyResponse myResponse = MyResponse(response.statusCode);
       if (response.statusCode == 200) {
         SharedPreferences sharedPreferences =
-            await SharedPreferences.getInstance();
+        await SharedPreferences.getInstance();
 
         Map<String, dynamic> data = json.decode(response.body!);
+        boysData=DeliveryBoyModel.fromJson(data);
         Map<String, dynamic> user = data['delivery_boy'];
-
-    
+       // boysData=DeliveryBoyModel.fromJson(data['delivery_boy']);
+        print("=======================${data['delivery_boy']}========>>>>${boysData}");
         String token = data['token'];
-
+        storage.write('tokenBoy',token);
         await saveUser(user,data['type']);
         await sharedPreferences.setString('token', token);
 
         myResponse.success = true;
-      }
-      else {
-        log('d'+ myResponse.toString() );
-        log('d'+ body);
-        log("nir");
+      } else {
         Map<String, dynamic> data = json.decode(response.body!);
         myResponse.success = false;
         myResponse.setError(data);
-        log(myResponse.setError(data).toString());
       }
 
       return myResponse;
     }   on DioError catch (e) {
 
       MyResponse myResponse = MyResponse(422);
-        Map<String, dynamic> data = json.decode(e.response.toString());
-        log(data.toString());
-        myResponse.success = false;
-        myResponse.setError(data);
-   
+      Map<String, dynamic> data = json.decode(e.response.toString());
+      log(data.toString());
+      myResponse.success = false;
+      myResponse.setError(data);
+
       log("Error:" +e.response.toString());
       log(e.toString());
-           return myResponse;
-    //  return MyResponse.makeServerProblemError();
+      return myResponse;
+      //  return MyResponse.makeServerProblemError();
     }
   }
 
@@ -184,7 +181,7 @@ class AuthController {
       String name, String email, String password, mobile, category,shop,File? drivingLicense,File? profilePic , carNum) async {
     //Get FCM
     PushNotificationsManager pushNotificationsManager =
-        PushNotificationsManager();
+    PushNotificationsManager();
     await pushNotificationsManager.init();
     String? fcmToken = await pushNotificationsManager.getToken();
 
@@ -194,9 +191,9 @@ class AuthController {
     String registerUrl = ApiUtil.MAIN_API_URL + ApiUtil.AUTH_REGISTER;
 
     final dio = Dio();
-    
 
-        // Create a new FormData object
+
+    // Create a new FormData object
     final formData = FormData();
 
     // Add text data to the form data
@@ -211,80 +208,80 @@ class AuthController {
       MapEntry('fcm_token', fcmToken.toString()),
     ]);
 
-        // Add file data to the form data
+    // Add file data to the form data
 
-          if(profilePic!=null){
+    if(profilePic!=null){
 
-              formData.files.addAll([
-          
-            MapEntry(
-              'profile_img',
-              await MultipartFile.fromFile(
-                profilePic.path,
-                filename: profilePic.path.split('/').last,
-              ),
-            ),
-          ]);
+      formData.files.addAll([
 
-          }
-
-        if(drivingLicense!=null){
-
-        formData.files.addAll([
-          
-              MapEntry(
-              'driving_license',
-              await MultipartFile.fromFile(
-                drivingLicense.path,
-                filename: drivingLicense.path.split('/').last,
-              ),
-            ),
-         ]);
+        MapEntry(
+          'profile_img',
+          await MultipartFile.fromFile(
+            profilePic.path,
+            filename: profilePic.path.split('/').last,
+          ),
+        ),
+      ]);
 
     }
 
-        final headers = {
+    if(drivingLicense!=null){
 
-           'Content-Type': 'application/json',
-            "Accept": "application/json",
+      formData.files.addAll([
+
+        MapEntry(
+          'driving_license',
+          await MultipartFile.fromFile(
+            drivingLicense.path,
+            filename: drivingLicense.path.split('/').last,
+          ),
+        ),
+      ]);
+
+    }
+
+    final headers = {
+
+      'Content-Type': 'application/json',
+      "Accept": "application/json",
 
     };
 
     log("3");
-  
-   
+
+
 
 
 
     //Encode
-   // String body = json.encode(formData);
+    // String body = json.encode(formData);
 
     //Check Internet
     bool isConnected = await InternetUtils.checkConnection();
     if (!isConnected) {
       return MyResponse.makeInternetConnectionError();
     }
- log("4");
+    log("4");
     try {
       // NetworkResponse response = await Network.post(registerUrl,
       //     headers: ApiUtil.getHeader(requestType: RequestType.Post),
       //     body: formData);
- log("5");
-           final response = await dio.post(
-            "https://wasiljo.com/public/api/v1/delivery-boy/register",
-            data: formData ,
-              options: Options(headers: headers),
-            
-          );
-           log("6");
+      log("5");
+      final response = await dio.post(
+        "https://wasiljo.com/public/api/v1/delivery-boy/register",
+        data: formData ,
+        options: Options(headers: headers),
 
-          log("Error : " +response.data.toString());
+      );
+      log("6");
+
+      log("Error : " +response.data.toString());
 
       MyResponse myResponse = MyResponse(response.statusCode);
 
       if (response.statusCode == 200) {
         SharedPreferences sharedPreferences =
-            await SharedPreferences.getInstance();
+        await SharedPreferences.getInstance();
 
         Map<String, dynamic> data = response.data;
         Map<String, dynamic> user = data['delivery_boy'];
@@ -295,28 +292,27 @@ class AuthController {
 
         myResponse.success = true;
       } else {
-      
+
         Map<String, dynamic> data = json.decode(response.data!);
-        
+
         myResponse.success = false;
         myResponse.setError(data);
-        
+
       }
 
       return myResponse;
     } on DioError catch (e) {
 
       MyResponse myResponse = MyResponse(422);
-        Map<String, dynamic> data = json.decode(e.response.toString());
-        log(data.toString());
-        myResponse.success = false;
-        myResponse.setError(data);
+      Map<String, dynamic> data = json.decode(e.response.toString());
+      log(data.toString());
+      myResponse.success = false;
+      myResponse.setError(data);
 
       log("Error:" +e.response.toString());
       log(e.toString());
-           return myResponse;
-
-    //  return MyResponse.makeServerProblemError();
+      return myResponse;
+      //  return MyResponse.makeServerProblemError();
     }
   }
 
@@ -342,7 +338,7 @@ class AuthController {
           headers: ApiUtil.getHeader(requestType: RequestType.Post),
           body: body);
 
-          log(response.body.toString());
+      log(response.body.toString());
 
       MyResponse myResponse = MyResponse(response.statusCode);
 
@@ -351,7 +347,7 @@ class AuthController {
       } else {
         Map<String, dynamic> data = json.decode(response.body!);
         myResponse.success = false;
-         myResponse.setError(data);
+        myResponse.setError(data);
       }
 
       return myResponse;
@@ -364,7 +360,7 @@ class AuthController {
 
   static Future<bool> logoutUser() async {
 
-        SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
+    SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     await sharedPreferences.remove('id');
     await sharedPreferences.remove('name');
@@ -376,13 +372,13 @@ class AuthController {
     await sharedPreferences.remove('type');
     await sharedPreferences.remove('token');
     //Remove FCM
- 
 
-   PushNotificationsManager pushNotificationsManager =
-        PushNotificationsManager();
+
+    PushNotificationsManager pushNotificationsManager =
+    PushNotificationsManager();
     await pushNotificationsManager.removeFCM();
 
-   
+
 
     return true;
   }
@@ -394,6 +390,7 @@ class AuthController {
   }
 
   static saveUserFromDeliveryBoy(DeliveryBoy deliveryBoy) async {
+
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
     await sharedPreferences.setInt('id', deliveryBoy.id!);
     await sharedPreferences.setString('name', deliveryBoy.name!);
@@ -405,19 +402,19 @@ class AuthController {
     await sharedPreferences.setInt('total_rating', deliveryBoy.totalRating!);
 
     await sharedPreferences.setInt('shop_id', deliveryBoy.shopId==null ? 0 :  deliveryBoy.shopId!);
-    
+
     await sharedPreferences.setBool('is_free', deliveryBoy.isFree!);
 
     await sharedPreferences.setBool('is_offline', deliveryBoy.isOffline!);
-  
+
     await sharedPreferences.setString('mobile', deliveryBoy.mobile!);
     await sharedPreferences.setBool(
         'mobile_verified', deliveryBoy.mobileVerified!);
   }
 
   /*-----------------   Get user from cache     ----------------------*/
-
-  static Future<DeliveryBoy> getUser() async {
+  int? catType;
+   static Future<DeliveryBoy> getUser() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
 
     log(sharedPreferences.getString('email').toString());
@@ -425,7 +422,7 @@ class AuthController {
     String? name = sharedPreferences.getString('name');
     String? email = sharedPreferences.getString('email');
     String? token = sharedPreferences.getString('token');
-     int? shopId = sharedPreferences.getInt('shop_id');
+    int? shopId = sharedPreferences.getInt('shop_id');
     String? avatarUrl = sharedPreferences.getString('avatar_url');
     String? type = sharedPreferences.getString('type');
     String? mobile = sharedPreferences.getString('mobile');
@@ -434,7 +431,7 @@ class AuthController {
     bool mobileVerified = sharedPreferences.getBool('mobile_verified') ?? false;
 
     return DeliveryBoy(
-     id,  name, email, token, avatarUrl, mobile, isOffline, mobileVerified,isFree,null,null,shopId,null,type);
+        id,  name, email, token, avatarUrl, mobile, isOffline, mobileVerified,isFree,null,null,shopId,null,type);
   }
 
   /*-----------------   Update user     ----------------------*/
@@ -479,7 +476,7 @@ class AuthController {
         myResponse.success = true;
       } else {
         Map<String, dynamic> data = json.decode(response.body!);
-       
+
         myResponse.success = false;
         myResponse.setErrorForRegister(data);
       }
@@ -495,7 +492,7 @@ class AuthController {
   static Future<AuthType> userAuthType() async {
     try {
       SharedPreferences sharedPreferences =
-          await SharedPreferences.getInstance();
+      await SharedPreferences.getInstance();
 
       String? token = sharedPreferences.getString("token");
       bool mobileVerified =
@@ -514,9 +511,6 @@ class AuthController {
 
   static Future<String?> getApiToken() async {
     SharedPreferences sharedPreferences = await SharedPreferences.getInstance();
-
-
-
     return sharedPreferences.getString("token");
   }
 
@@ -572,7 +566,7 @@ class AuthController {
                   color: themeData.colorScheme.primary, fontWeight: 600)),
           TextSpan(
               text:
-                  "After testing please logout, because there is many user testing with same IDs so it can be possible that you can get unnecessary notifications",
+              "After testing please logout, because there is many user testing with same IDs so it can be possible that you can get unnecessary notifications",
               style: AppTheme.getTextStyle(themeData.textTheme.bodyText2,
                   color: themeData.colorScheme.onBackground,
                   fontWeight: 500,
