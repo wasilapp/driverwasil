@@ -1,142 +1,66 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
+AppUserData appUserData = AppUserData();
 
-import 'package:DeliveryBoyApp/utils/TextUtils.dart';
+class AppUserData {
+  Data? data;
+  bool? status;
+  String? stateNum;
+  String? message;
 
-class DeliveryBoy {
-  int? id;
-  bool? isOffline = false, mobileVerified;
-  bool? isFree;
-  int? rating;
-  int? totalRating;
-  int? shopId;
-  bool? rememberToken;
-  String? name, email, token, avatarUrl, mobile;
-  String? type;
+  AppUserData({this.data, this.status, this.stateNum, this.message});
 
-  DeliveryBoy(
-    this.id,
-    this.name,
-    this.email,
-    this.token,
-    this.avatarUrl,
-    this.mobile,
-    this.isOffline,
-    this.mobileVerified,
-    this.isFree,
-    this.rating,
-    this.totalRating,
-    this.shopId,
-    this.rememberToken,
-    this.type,
-  );
-
-  static DeliveryBoy fromJson(Map<String, dynamic> jsonObject, String type) {
-    int? id = jsonObject['id'];
-    String? name = jsonObject['name'].toString();
-    String? email = jsonObject['email'].toString();
-    String? avatarUrl = jsonObject['avatar_url'].toString();
-    String? mobile = jsonObject['mobile'].toString();
-
-    bool isOffline = TextUtils.parseBool(jsonObject['is_offline']);
-    bool isFree = TextUtils.parseBool(jsonObject['is_free']);
-    int rating = jsonObject['rating'];
-    int totalRating = jsonObject['total_rating'];
-    int? shopId = jsonObject['shop_id'] == null ? null : jsonObject['shop_id'];
-    bool rememberToken = TextUtils.parseBool(jsonObject['remember_token']);
-    bool mobileVerified = TextUtils.parseBool(jsonObject['mobile_verified']);
-
-    return DeliveryBoy(
-        id,
-        name,
-        email,
-        null,
-        avatarUrl,
-        mobile,
-        isOffline,
-        mobileVerified,
-        isFree,
-        rating,
-        totalRating,
-        shopId,
-        rememberToken,
-        type);
+  AppUserData.fromJson(Map<String, dynamic> json) {
+    data = json['data'] != null ? new Data.fromJson(json['data']) : null;
+    status = json['status'];
+    stateNum = json['stateNum'];
+    message = json['message'];
   }
 
-  @override
-  String toString() {
-    return 'DeliveryBoy{id: $id, isOffline: $isOffline, name: $name, email: $email, token: $token, avatarUrl: $avatarUrl, mobile: $mobile}';
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.data != null) {
+      data['data'] = this.data!.toJson();
+    }
+    data['status'] = this.status;
+    data['stateNum'] = this.stateNum;
+    data['message'] = this.message;
+    return data;
   }
-
-  String getAvatarUrl() {
-    return TextUtils.getImageUrl(avatarUrl);
-  }
-
-  DeliveryBoy fromMap(Map<String, dynamic> jsonObject,
-      {String lat = "", String long = ""}) {
-    int? id = jsonObject['id'] ?? 14234235235;
-    String? name = jsonObject['name'].toString();
-    String? email = jsonObject['email'].toString();
-    String? avatarUrl = jsonObject['avatar_url'].toString();
-    String? mobile = jsonObject['mobile'].toString();
-
-    bool isOffline = TextUtils.parseBool(jsonObject['is_offline']);
-    bool isFree = TextUtils.parseBool(jsonObject['is_free']);
-    int rating = jsonObject['rating'];
-    int totalRating = jsonObject['total_rating'];
-    int shopId = jsonObject['shop_id'];
-    bool rememberToken = TextUtils.parseBool(jsonObject['remember_token']);
-
-    bool mobileVerified = TextUtils.parseBool(jsonObject['mobile_verified']);
-
-    return DeliveryBoy(
-        id,
-        name,
-        email,
-        null,
-        avatarUrl,
-        mobile,
-        isOffline,
-        mobileVerified,
-        isFree,
-        rating,
-        totalRating,
-        shopId,
-        rememberToken,
-        type);
-  }
-
-  Map<String, dynamic> toMap({double lat = 0.0, double long = 0.0}) {
-    return <String, dynamic>{
-      'id': id,
-      'isOffline': isOffline,
-      'isFree': isFree,
-      'name': name,
-      'email': email,
-      'type': type,
-      'shop_id': shopId,
-      // 'token':token,
-      'avatarUrl': 'avatar_url',
-      'mobile': mobile,
-      "lat": lat,
-      "long": long
-    };
-  }
-
-  String toJson() => json.encode(toMap());
 }
 
-class DeliveryBoyModel {
+class Data {
+  DeliveryBoy? deliveryBoy;
+  String? token;
+
+  Data({this.deliveryBoy, this.token});
+
+  Data.fromJson(Map<String, dynamic> json) {
+    deliveryBoy = json['deliveryBoy'] != null
+        ? new DeliveryBoy.fromJson(json['deliveryBoy'])
+        : null;
+    token = json['token'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    if (this.deliveryBoy != null) {
+      data['deliveryBoy'] = this.deliveryBoy!.toJson();
+    }
+    data['token'] = this.token;
+    return data;
+  }
+}
+
+class DeliveryBoy {
   int? id;
   Name? name;
   String? agencyName;
   String? carNumber;
   String? email;
-  int? emailVerifiedAt;
+  String? emailVerifiedAt;
   String? password;
   String? fcmToken;
-  String? longitude;
   String? latitude;
+  String? longitude;
   int? isFree;
   int? isOffline;
   int? isActive;
@@ -147,22 +71,23 @@ class DeliveryBoyModel {
   int? totalRating;
   int? categoryId;
   int? shopId;
-  int? rememberToken;
+  String? rememberToken;
   int? isVerified;
   String? drivingLicense;
+  String? carLicense;
   int? isApproval;
   int? distance;
-  int? otp;
-  int? fullGasBottles;
-  int? emptyGasBottles;
-  int? gasBottlesCapacity;
+  String? otp;
+  int? totalCapacity;
   int? totalQuantity;
   int? availableQuantity;
+  String? referrer;
+  String? referrerLink;
   String? createdAt;
   String? updatedAt;
   Category? category;
 
-  DeliveryBoyModel(
+  DeliveryBoy(
       {this.id,
       this.name,
       this.agencyName,
@@ -186,19 +111,20 @@ class DeliveryBoyModel {
       this.rememberToken,
       this.isVerified,
       this.drivingLicense,
+      this.carLicense,
       this.isApproval,
       this.distance,
       this.otp,
-      this.fullGasBottles,
-      this.emptyGasBottles,
-      this.gasBottlesCapacity,
+      this.totalCapacity,
       this.totalQuantity,
       this.availableQuantity,
+      this.referrer,
+      this.referrerLink,
       this.createdAt,
       this.updatedAt,
       this.category});
 
-  DeliveryBoyModel.fromJson(Map<String, dynamic> json) {
+  DeliveryBoy.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'] != null ? new Name.fromJson(json['name']) : null;
     agencyName = json['agency_name'];
@@ -222,14 +148,15 @@ class DeliveryBoyModel {
     rememberToken = json['remember_token'];
     isVerified = json['is_verified'];
     drivingLicense = json['driving_license'];
+    carLicense = json['car_license'];
     isApproval = json['is_approval'];
     distance = json['distance'];
     otp = json['otp'];
-    fullGasBottles = json['full_gas_bottles'];
-    emptyGasBottles = json['empty_gas_bottles'];
-    gasBottlesCapacity = json['gas_bottles_capacity'];
+    totalCapacity = json['total_capacity'];
     totalQuantity = json['total_quantity'];
     availableQuantity = json['available_quantity'];
+    referrer = json['referrer'];
+    referrerLink = json['referrer_link'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     category = json['category'] != null
@@ -264,74 +191,21 @@ class DeliveryBoyModel {
     data['remember_token'] = this.rememberToken;
     data['is_verified'] = this.isVerified;
     data['driving_license'] = this.drivingLicense;
+    data['car_license'] = this.carLicense;
     data['is_approval'] = this.isApproval;
     data['distance'] = this.distance;
     data['otp'] = this.otp;
-    data['full_gas_bottles'] = this.fullGasBottles;
-    data['empty_gas_bottles'] = this.emptyGasBottles;
-    data['gas_bottles_capacity'] = this.gasBottlesCapacity;
+    data['total_capacity'] = this.totalCapacity;
     data['total_quantity'] = this.totalQuantity;
     data['available_quantity'] = this.availableQuantity;
+    data['referrer'] = this.referrer;
+    data['referrer_link'] = this.referrerLink;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     if (this.category != null) {
       data['category'] = this.category!.toJson();
     }
     return data;
-  }
-  // @override
-  // String toString() {
-  //   return 'DeliveryBoy{id: $id, isOffline: $isOffline, name: $name, email: $email, token: $token, avatarUrl: $avatarUrl, mobile: $mobile}';
-  // }
-
-  String getAvatarUrl() {
-    return TextUtils.getImageUrl(avatarUrl);
-  }
-
-  DeliveryBoyModel fromMap(Map<String, dynamic> jsonObject,
-      {String lat = "", String long = ""}) {
-    int? id = jsonObject['id'] ?? 14234235235;
-    String? name = jsonObject['name'].toString();
-    String? email = jsonObject['email'].toString();
-    String? avatarUrl = jsonObject['avatar_url'].toString();
-    String? mobile = jsonObject['mobile'].toString();
-
-    bool isOffline = TextUtils.parseBool(jsonObject['is_offline']);
-    bool isFree = TextUtils.parseBool(jsonObject['is_free']);
-    int rating = jsonObject['rating'];
-    int totalRating = jsonObject['total_rating'];
-    int shopId = jsonObject['shop_id'];
-    bool rememberToken = TextUtils.parseBool(jsonObject['remember_token']);
-
-    bool mobileVerified = TextUtils.parseBool(jsonObject['mobile_verified']);
-
-    return DeliveryBoyModel(
-      id: id,
-      carNumber: carNumber,
-      agencyName: agencyName,
-      categoryId: categoryId,
-      shopId: shopId,
-      name: Name(en: name),
-      email: email,
-      mobile: mobile,
-    );
-  }
-
-  Map<String, dynamic> toMap({double lat = 0.0, double long = 0.0}) {
-    return <String, dynamic>{
-      'id': id,
-      'isOffline': isOffline,
-      'isFree': isFree,
-      'name': name,
-      'email': email,
-
-      'shop_id': shopId,
-      // 'token':token,
-      'avatarUrl': 'avatar_url',
-      'mobile': mobile,
-      "lat": lat,
-      "long": long
-    };
   }
 }
 
@@ -358,12 +232,12 @@ class Category {
   int? id;
   Name? title;
   Name? description;
-  double? commesion;
+  int? commesion;
   String? imageUrl;
   String? type;
   int? deliveryFee;
-  double? expeditedFees;
-  double? schedulerFees;
+  String? expeditedFees;
+  String? schedulerFees;
   String? startWorkTime;
   String? endWorkTime;
   int? active;

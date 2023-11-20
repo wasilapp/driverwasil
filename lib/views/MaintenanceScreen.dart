@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 import '../AppTheme.dart';
 import '../AppThemeNotifier.dart';
 import 'AppScreen.dart';
-import 'auth/LoginScreen.dart';
+import 'auth/login/LoginScreen.dart';
 import 'auth/OTPVerificationScreen.dart';
 
 

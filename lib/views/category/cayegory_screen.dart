@@ -1,121 +1,121 @@
+import 'dart:convert';
+
 import 'package:DeliveryBoyApp/api/api.dart';
 import 'package:DeliveryBoyApp/custom_bakage.dart';
 import 'package:DeliveryBoyApp/views/auth/authControllernew.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:http/http.dart'as http;
+import '../auth/CategoryController.dart';
 import 'addNewCategory.dart';
+import 'add_item/my_items_model.dart';
 import 'controller/CategoryController.dart';
 
-class CategoryScreen extends StatelessWidget {
+class CategoryScreen extends StatefulWidget {
    CategoryScreen({Key? key});
-  Category_Controller category_Controller=Get.put(Category_Controller());
+
+  @override
+  State<CategoryScreen> createState() => _CategoryScreenState();
+}
+
+class _CategoryScreenState extends State<CategoryScreen> {
+   var mySubcategoryShops = [];
+
+   Future<void> getMyItemShop() async {
+     mySubcategoryShops.clear();
+     SharedPreferences prefs=await SharedPreferences.getInstance();
+     var token=prefs.getString('token');
+
+     var url = Uri.parse(
+         "https://news.wasiljo.com/public/api/v1/delivery-boy/mySubCategories");
+     var response= await http.get(url, headers: {
+       'Authorization': 'Bearer $token'});
+     if((response.statusCode>=200&& response.statusCode<300)){
+       if(response.body.isEmpty){
+
+         return ;
+       }
+
+       print(response.body);
+       List listShop=json.decode(response.body)['data']['subCategories'];
+       print(json.decode(response.body)['data']['subCategories']);
+       log(listShop.length.toString());log("***************************jjjjjjjjjjjjjjjjjjjj**************************************");
+       for(int i=0;i<listShop.length;i++){
+         print('l');
+         setState(() {
+           mySubcategoryShops.add(MySubCategories.fromJson(listShop[i]));
+         });
+         // shops.add(Shops.fromJson(listShopCategory[i]));
+         print(' myyyyyyyyysubcategoryShops$mySubcategoryShops');
+         print(' my subcategoryShops${listShop.length}');
+       }
+       return;
+     }
+
+
+
+   }
+
+   void initState(){
+print('start');
+   getMyItemShop();
+   }
+
    AuthControllerr authControllerr=Get.put(AuthControllerr());
+
+   CategoryController categoryController=Get.put(CategoryController());
+
   @override
   Widget build(BuildContext context) {
-    category_Controller.getDeliveryBoyData();
-    category_Controller.getCategoryData();
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Category',style: TextStyle(color: Colors.black),),
-      ),
-      ///api/v1/delivery-boy/mySubCategories
-      body: Stack(
-        alignment: Alignment.topCenter,
-        children: [
-          GetBuilder(
-            builder: (Category_Controller controller) {
-              return ListView.builder(
-                padding: EdgeInsets.only(top: 60),
-                  itemCount:     category_Controller.myCategory?.subCategories.length??0,
-                  itemBuilder:(context,index)=>ItemStock(
-                    id:  category_Controller.myCategory?.subCategories[index].id,
-                    image:  category_Controller.myCategory!.subCategories[index].imageUrl,
-                    name:  category_Controller.myCategory!.subCategories[index].title!['en']??'',
-                    avilable: category_Controller.myCategory!.subCategories[index].details?.availableQuantity??'0',
-                    total: category_Controller.myCategory!.subCategories[index].details?.totalQuantity??'0',) );
-            }
-          ),
-          Container(
-            height: 60,
-            width: double.infinity,
+    final GlobalKey<RefreshIndicatorState> _refreshIndicatorKey =
+    GlobalKey<RefreshIndicatorState>();
+    return
+      RefreshIndicator(
+          key: _refreshIndicatorKey,
+          onRefresh: () async {
+            await Future.delayed(Duration(seconds: 2));
+            getMyItemShop();
 
-            padding: EdgeInsets.all(8),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Container(
+            },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text('المنتجات',style: TextStyle(color: Colors.black),),
+        ),
+        ///api/v1/delivery-boy/mySubCategories
+        body:
+        Column(children: [
 
-                    margin:EdgeInsets.symmetric(horizontal: 6),
-                    decoration: BoxDecoration(
-                      color: primaryColor.withOpacity(.3),
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+      ListView.builder(shrinkWrap: true,
+            padding: EdgeInsets.only(top: 20),
+              itemCount:mySubcategoryShops.length,
+             itemBuilder: (context, index) {
+            print('kkkkk');
+               var item=mySubcategoryShops[index];
+               print("2222222222222${mySubcategoryShops.length}2222222222222222");
+               print("2222222222222${mySubcategoryShops}2222222222222222");
+              return ItemStock(
+                id:  item.id,
+                image:  item.imageUrl,
+                name: item.title.en,
+                avilable: item.details?.availableQuantity??'0',
+                total: item.details?.totalQuantity??'0',);
 
-                      children: [
-                        Text('Total Capacity'),
-                        Text('${authControllerr.boysDeliveryData?.data?.deliveryBoy?.totalCapacity}'),
+             },
+              )
+        ]),
+        floatingActionButton: FloatingActionButton(
+          onPressed: (){
+            Navigator.push(context, MaterialPageRoute(builder: (context)=>AddNewCategory()));
+           getMyItemShop();
+          },
+          child: Icon(Icons.add),
 
-                      ],
-                    ),
-                  ),
-                ),
-                Expanded(
-                  child: Container(
-                    margin:EdgeInsets.symmetric(horizontal: 6),
-                    decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(.3),
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-
-                      children: [
-                        Text('Total Quantity'),
-                        Text('${authControllerr.boysDeliveryData?.data?.deliveryBoy?.totalQuantity}'),
-
-
-                      ],
-                    ),
-                  ),
-                )
-                ,
-                Expanded(
-                  child: Container(
-                    margin:EdgeInsets.symmetric(horizontal: 6),
-                    decoration: BoxDecoration(
-                        color: primaryColor.withOpacity(.3),
-                        borderRadius: BorderRadius.circular(10)
-                    ),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      children: [
-                        Text('Available Quantity'),
-                        Text('${authControllerr.boysDeliveryData?.data?.deliveryBoy?.availableQuantity}'),
-
-
-                      ],
-                    ),
-                  ),
-                )
-                ,
-              ],
-            ),
-          ),
-
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>AddNewCategory()));
-        },
-        child: Icon(Icons.add),
-
+        ),
       ),
     );
   }
+
    Widget ItemStock({required String image,required String name,required String? avilable,required String? total,required id })=>Card(
      elevation: 8,
      margin: EdgeInsets.all(20),
@@ -201,13 +201,36 @@ class CategoryScreen extends StatelessWidget {
                  height: 10,
                ),
                Row(
-                 
+
                  children: [
                    GestureDetector(
-                       onTap: (){
-                         category_Controller.deleteCategory(id: id.toString());
+                       onTap: () async {
+                         SharedPreferences prefs=await SharedPreferences.getInstance();
+                         var token=prefs.getString('token');
+
+                         var headers = {
+                           'Authorization': 'Bearer $token'
+                         };
+                         var request = http.Request('POST', Uri.parse('https://news.wasiljo.com/public/api/v1/delivery-boy/subcategories/remove/${id.toString()}'));
+
+                         request.headers.addAll(headers);
+
+                         http.StreamedResponse response = await request.send();
+
+                         if (response.statusCode == 200) {
+                           print(await response.stream.bytesToString());
+                         getMyItemShop();
+                         Get.off(CategoryScreen());
+                         }
+                         else {
+                         print(response.reasonPhrase);
+                         }
+
+
+
 
                        },
+
                        child: Row(
                          children: [
                            Icon(Icons.delete,color: Colors.red,),
@@ -246,5 +269,4 @@ class CategoryScreen extends StatelessWidget {
        ),
      ),
    );
-
 }

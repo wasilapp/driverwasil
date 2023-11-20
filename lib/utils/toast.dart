@@ -2,25 +2,27 @@ import 'package:DeliveryBoyApp/custom_bakage.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 
-enum toastStates { ERROR, WARRING, SUCESS }
+enum ToastStates { ERROR, WARRING, SUCESS }
 
-Color? toastColor({toastStates? state}) {
+Color? toastColor({ToastStates? state}) {
   Color? color;
   switch (state) {
-    case toastStates.ERROR:
+    case ToastStates.ERROR:
       color = Color.fromRGBO(245, 3, 3, 0.6470588235294118).withOpacity(.8);
       break;
-    case toastStates.SUCESS:
+    case ToastStates.SUCESS:
       color = primaryColor;
       break;
-    case toastStates.WARRING:
+    case ToastStates.WARRING:
       color = Color.fromRGBO(245, 70, 1, 0.6980392156862745).withOpacity(.8);
+      break;
+    case null:
       break;
   }
   return color;
 }
 
-void showtoast({required String text, required toastStates state}) =>
+void showtoast({required String text, required ToastStates state}) =>
     Fluttertoast.showToast(
         msg: text,
         toastLength: Toast.LENGTH_SHORT,

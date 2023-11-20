@@ -19,7 +19,7 @@ import '../../utils/fonts.dart';
 import '../../utils/navigator.dart';
 import '../../utils/text_field.dart';
 import '../../utils/ui/textfeild.dart';
-import 'LoginScreen.dart';
+import 'login/LoginScreen.dart';
 
 class ResetPasswordScreen extends StatefulWidget {
   final String fullNumber;

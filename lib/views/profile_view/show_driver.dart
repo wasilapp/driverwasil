@@ -1,70 +1,112 @@
 
 
-class Shop {
+class DeliveryBoyShow {
   int? id;
   Name? name;
-  Null? email;
-  Null? mobile;
-  String? barcode;
-  double? latitude;
-  double? longitude;
-  String? address;
-  Null? imageUrl;
+  Null? agencyName;
+  String? carNumber;
+  String? email;
+  Null? emailVerifiedAt;
+  String? password;
+  Null? fcmToken;
+  Null? latitude;
+  Null? longitude;
+  int? isFree;
+  int? isOffline;
+  int? isActive;
+  String? avatarUrl;
+  String? mobile;
+  int? mobileVerified;
   int? rating;
-  int? deliveryRange;
   int? totalRating;
-  int? defaultTax;
-  int? availableForDelivery;
-  int? open;
-  int? managerId;
   int? categoryId;
+  int? shopId;
+  Null? rememberToken;
+  int? isVerified;
+  String? drivingLicense;
+  String? carLicense;
+  int? isApproval;
   int? distance;
+  Null? otp;
+  int? totalCapacity;
+  int ?totalQuantity;
+  int ?availableQuantity;
+  String? referrer;
+  Null? referrerLink;
   String? createdAt;
   String? updatedAt;
   List<SubCategory>? subCategory;
 
-  Shop(
+  DeliveryBoyShow(
       {this.id,
         this.name,
+        this.agencyName,
+        this.carNumber,
         this.email,
-        this.mobile,
-        this.barcode,
+        this.emailVerifiedAt,
+        this.password,
+        this.fcmToken,
         this.latitude,
         this.longitude,
-        this.address,
-        this.imageUrl,
+        this.isFree,
+        this.isOffline,
+        this.isActive,
+        this.avatarUrl,
+        this.mobile,
+        this.mobileVerified,
         this.rating,
-        this.deliveryRange,
         this.totalRating,
-        this.defaultTax,
-        this.availableForDelivery,
-        this.open,
-        this.managerId,
         this.categoryId,
+        this.shopId,
+        this.rememberToken,
+        this.isVerified,
+        this.drivingLicense,
+        this.carLicense,
+        this.isApproval,
         this.distance,
+        this.otp,
+        this.totalCapacity,
+        this.totalQuantity,
+        this.availableQuantity,
+        this.referrer,
+        this.referrerLink,
         this.createdAt,
         this.updatedAt,
         this.subCategory});
 
-  Shop.fromJson(Map<String, dynamic> json) {
+  DeliveryBoyShow.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'] != null ? new Name.fromJson(json['name']) : null;
+    agencyName = json['agency_name'];
+    carNumber = json['car_number'];
     email = json['email'];
-    mobile = json['mobile'];
-    barcode = json['barcode'];
+    emailVerifiedAt = json['email_verified_at'];
+    password = json['password'];
+    fcmToken = json['fcm_token'];
     latitude = json['latitude'];
     longitude = json['longitude'];
-    address = json['address'];
-    imageUrl = json['image_url'];
+    isFree = json['is_free'];
+    isOffline = json['is_offline'];
+    isActive = json['is_active'];
+    avatarUrl = json['avatar_url'];
+    mobile = json['mobile'];
+    mobileVerified = json['mobile_verified'];
     rating = json['rating'];
-    deliveryRange = json['delivery_range'];
     totalRating = json['total_rating'];
-    defaultTax = json['default_tax'];
-    availableForDelivery = json['available_for_delivery'];
-    open = json['open'];
-    managerId = json['manager_id'];
     categoryId = json['category_id'];
+    shopId = json['shop_id'];
+    rememberToken = json['remember_token'];
+    isVerified = json['is_verified'];
+    drivingLicense = json['driving_license'];
+    carLicense = json['car_license'];
+    isApproval = json['is_approval'];
     distance = json['distance'];
+    otp = json['otp'];
+    totalCapacity = json['total_capacity'];
+    totalQuantity = json['total_quantity']??0;
+    availableQuantity = json['available_quantity']??0;
+    referrer = json['referrer'];
+    referrerLink = json['referrer_link'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
     if (json['sub_category'] != null) {
@@ -81,22 +123,36 @@ class Shop {
     if (this.name != null) {
       data['name'] = this.name!.toJson();
     }
+    data['agency_name'] = this.agencyName;
+    data['car_number'] = this.carNumber;
     data['email'] = this.email;
-    data['mobile'] = this.mobile;
-    data['barcode'] = this.barcode;
+    data['email_verified_at'] = this.emailVerifiedAt;
+    data['password'] = this.password;
+    data['fcm_token'] = this.fcmToken;
     data['latitude'] = this.latitude;
     data['longitude'] = this.longitude;
-    data['address'] = this.address;
-    data['image_url'] = this.imageUrl;
+    data['is_free'] = this.isFree;
+    data['is_offline'] = this.isOffline;
+    data['is_active'] = this.isActive;
+    data['avatar_url'] = this.avatarUrl;
+    data['mobile'] = this.mobile;
+    data['mobile_verified'] = this.mobileVerified;
     data['rating'] = this.rating;
-    data['delivery_range'] = this.deliveryRange;
     data['total_rating'] = this.totalRating;
-    data['default_tax'] = this.defaultTax;
-    data['available_for_delivery'] = this.availableForDelivery;
-    data['open'] = this.open;
-    data['manager_id'] = this.managerId;
     data['category_id'] = this.categoryId;
+    data['shop_id'] = this.shopId;
+    data['remember_token'] = this.rememberToken;
+    data['is_verified'] = this.isVerified;
+    data['driving_license'] = this.drivingLicense;
+    data['car_license'] = this.carLicense;
+    data['is_approval'] = this.isApproval;
     data['distance'] = this.distance;
+    data['otp'] = this.otp;
+    data['total_capacity'] = this.totalCapacity;
+    data['total_quantity'] = this.totalQuantity;
+    data['available_quantity'] = this.availableQuantity;
+    data['referrer'] = this.referrer;
+    data['referrer_link'] = this.referrerLink;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
     if (this.subCategory != null) {
@@ -129,8 +185,8 @@ class SubCategory {
   int? id;
   Name? title;
   Name? description;
-  dynamic? price;
-  int? shopId;
+  double? price;
+  Null? shopId;
   int? categoryId;
   int? active;
   int? isPrimary;
@@ -139,7 +195,7 @@ class SubCategory {
   int? quantity;
   String? createdAt;
   String? updatedAt;
-  Pivot? pivot;
+  Details? details;
 
   SubCategory(
       {this.id,
@@ -155,7 +211,7 @@ class SubCategory {
         this.quantity,
         this.createdAt,
         this.updatedAt,
-        this.pivot});
+        this.details});
 
   SubCategory.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -173,7 +229,8 @@ class SubCategory {
     quantity = json['quantity'];
     createdAt = json['created_at'];
     updatedAt = json['updated_at'];
-    pivot = json['pivot'] != null ? new Pivot.fromJson(json['pivot']) : null;
+    details =
+    json['details'] != null ? new Details.fromJson(json['details']) : null;
   }
 
   Map<String, dynamic> toJson() {
@@ -195,42 +252,42 @@ class SubCategory {
     data['quantity'] = this.quantity;
     data['created_at'] = this.createdAt;
     data['updated_at'] = this.updatedAt;
-    if (this.pivot != null) {
-      data['pivot'] = this.pivot!.toJson();
+    if (this.details != null) {
+      data['details'] = this.details!.toJson();
     }
     return data;
   }
 }
 
-class Pivot {
-  int? shopId;
+class Details {
+  int? deliveryBoyId;
   int? subCategoryId;
-  String? price;
-  Null? quantity;
-  String? isShow;
+  Null? price;
+  String? totalQuantity;
+  String? availableQuantity;
 
-  Pivot(
-      {this.shopId,
+  Details(
+      {this.deliveryBoyId,
         this.subCategoryId,
         this.price,
-        this.quantity,
-        this.isShow});
+        this.totalQuantity,
+        this.availableQuantity});
 
-  Pivot.fromJson(Map<String, dynamic> json) {
-    shopId = json['shop_id'];
+  Details.fromJson(Map<String, dynamic> json) {
+    deliveryBoyId = json['delivery_boy_id'];
     subCategoryId = json['sub_category_id'];
     price = json['price'];
-    quantity = json['quantity'];
-    isShow = json['is_show'];
+    totalQuantity = json['total_quantity'];
+    availableQuantity = json['available_quantity'];
   }
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = new Map<String, dynamic>();
-    data['shop_id'] = this.shopId;
+    data['delivery_boy_id'] = this.deliveryBoyId;
     data['sub_category_id'] = this.subCategoryId;
     data['price'] = this.price;
-    data['quantity'] = this.quantity;
-    data['is_show'] = this.isShow;
+    data['total_quantity'] = this.totalQuantity;
+    data['available_quantity'] = this.availableQuantity;
     return data;
   }
 }

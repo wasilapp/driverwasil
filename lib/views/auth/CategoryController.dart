@@ -135,7 +135,7 @@ class CategoryController extends GetxController {
     super.onInit();
     getCategory();
    getShop();
-    getItemShop();
+    // getItemShop();
   }
   //------------------------ Get all categories -----------------------------------------//
   Future<void> getCategory() async {

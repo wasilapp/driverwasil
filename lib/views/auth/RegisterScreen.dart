@@ -32,7 +32,7 @@ import '../../utils/helper/navigator.dart';
 import '../../utils/navigator.dart';
 import '../../utils/ui/textfeild.dart';
 import '../AppScreen.dart';
-import 'LoginScreen.dart';
+import 'login/LoginScreen.dart';
 import 'OTPVerificationScreen.dart';
 import 'authControllernew.dart';
 import 'd.dart';
@@ -178,7 +178,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       mobile: contrycode.toString() + mobile!.text,
       nameEnglish: nameArabic!.text,
       carNum: carNumber!.text,
-      shopId:  selectedShop,
+      shopId:  selectedShop==null?'':selectedShop!.id,
       categoryId: selectedCategory!.id,
     );
   }
@@ -282,11 +282,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 Expanded(
                   child: CustomTextField(
-                    validator: (value) {
-                      if (value == null || value.isEmpty) {
-                        return Translator.translate('Please enter your Email number');
-                      }
-                    },
+
                     keyBoard: TextInputType.emailAddress,
                     controller: email!,
                     hintText: Translator.translate("Email"),
@@ -547,11 +543,11 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     });
                   },
                 ),
-                Obx(() => Container(
-                      margin: EdgeInsets.only(left: 20, top: 20),
-                      height: 90,
+                authController.erroeMsg.length==0?Text('')     :  Obx(() => Container(
+                      margin: EdgeInsets.symmetric(horizontal:  20, vertical: 10),
+
                       child: authController.erroeMsg.isNotEmpty
-                          ? ListView.builder(
+                          ? ListView.builder(shrinkWrap: true,
                               itemCount: authController.erroeMsg.length,
                               itemBuilder: (context, index) {
                                 return Row(

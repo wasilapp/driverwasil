@@ -1,7 +1,7 @@
 
 import 'package:DeliveryBoyApp/controllers/AuthController.dart';
 import 'package:DeliveryBoyApp/views/MaintenanceScreen.dart';
-import 'package:DeliveryBoyApp/views/auth/LoginScreen.dart';
+import 'package:DeliveryBoyApp/views/auth/login/LoginScreen.dart';
 import 'package:flutter/material.dart';
 
 enum RequestType { Post, Get, PostWithAuth, GetWithAuth }

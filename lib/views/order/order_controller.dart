@@ -58,7 +58,6 @@ cancelled_by_driver = 12*/
       print(result.length);
       orders.clear();
       for (int index = 0; index < result.length; index++) {
-
         orders.add(OrdersModel.fromJson(result[index]));
         print(orders);
         print(
@@ -103,14 +102,16 @@ cancelled_by_driver = 12*/
 
       return;
     }
-    if(response.statusCode==400){
+    if (response.statusCode == 400) {
       print(json.decode(response.body)['error']);
-    showtoast(text:json.decode(response.body)['error'].toString()??'error' ,state: toastStates.WARRING);
+      showtoast(
+          text: json.decode(response.body)['error'].toString() ?? 'error',
+          state: ToastStates.WARRING);
     }
 
     statusModel.value.updateStatus(GeneralStatus.error);
     statusModel.value.updateError("Something went wrong");
-getOrders();
+    getOrders();
   }
 
   get isWaiting => statusModel.value.status.value == GeneralStatus.waiting;
@@ -151,13 +152,14 @@ getOrders();
       print('Could not launch $phoneUrl');
     }
   }
+
   DeliveryBoyModel? deliveryBoyModel;
-  showDriver()async{
+  showDriver() async {
     String? token = await controller.getApiToken();
     statusModel.value.updateStatus(GeneralStatus.waiting);
 
-    var url = Uri.parse(
-        'https://news.wasiljo.com/public/api/v1/delivery-boy/show');
+    var url =
+        Uri.parse('https://news.wasiljo.com/public/api/v1/delivery-boy/show');
     var response = await http.post(url, headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
