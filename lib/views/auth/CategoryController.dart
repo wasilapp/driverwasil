@@ -113,7 +113,7 @@ import 'package:DeliveryBoyApp/controllers/general_status_model.dart';
 import 'package:DeliveryBoyApp/views/auth/shop_model.dart';
 import 'package:get/get.dart';
 import 'package:get/get_state_manager/src/simple/get_controllers.dart';
-import 'package:http/http.dart'as http;
+import 'package:http/http.dart' as http;
 import 'package:DeliveryBoyApp/api/api_util.dart';
 import 'package:DeliveryBoyApp/controllers/AuthController.dart';
 import 'package:DeliveryBoyApp/models/MyResponse.dart';
@@ -124,119 +124,112 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../category/add_item/item_shop_mofel.dart';
 import 'Categories.dart';
 
-
 class CategoryController extends GetxController {
   var category = [].obs;
- var shops = [].obs;
- var subcategoryShops = [].obs;
-  late var statusModel=GeneralStatusModel().obs;
+  var shops = [].obs;
+  var subcategoryShops = [].obs;
+  late var statusModel = GeneralStatusModel().obs;
   @override
-  void onInit(){
+  void onInit() {
     super.onInit();
     getCategory();
-   getShop();
+    getShop();
     // getItemShop();
   }
+
   //------------------------ Get all categories -----------------------------------------//
   Future<void> getCategory() async {
     statusModel.value.updateStatus(GeneralStatus.waiting);
     print('object');
     var url = Uri.parse(
-        "https://news.wasiljo.com/public/api/v1/delivery-boy/categories");
-    var response= await http.get(url);
-    if((response.statusCode>=200&& response.statusCode<300)){
-      if(response.body.isEmpty){
+        "https://admin.wasiljo.com/public/api/v1/delivery-boy/categories");
+
+    var response = await http.get(url);
+    if ((response.statusCode >= 200 && response.statusCode < 300)) {
+      if (response.body.isEmpty) {
+
         statusModel.value.updateStatus(GeneralStatus.error);
         statusModel.value.updateError('some thing error');
-        return ;
+        return;
       }
       statusModel.value.updateStatus(GeneralStatus.success);
 
-      List listCategory=json.decode(response.body)['data']['categories'];
+      List listCategory = json.decode(response.body)['data']['categories'];
 
-      for(int i=0;i<listCategory.length;i++){
-
+      for (int i = 0; i < listCategory.length; i++) {
         category.add(Categories.fromJson(listCategory[i]));
-
       }
       print(response.body);
       return;
     }
     statusModel.value.updateStatus(GeneralStatus.error);
     statusModel.value.updateError('some thing error');
-
-
   }
+
   //------------------------ Get all categories -----------------------------------------//
   Future<void> getShop() async {
     statusModel.value.updateStatus(GeneralStatus.waiting);
+
     var url = Uri.parse(
-        "https://news.wasiljo.com/public/api/v1/delivery-boy/shops");
+        "https://admin.wasiljo.com/public/api/v1/delivery-boy/shops");
     var response= await http.get(url);
     if((response.statusCode>=200&& response.statusCode<300)){
       if(response.body.isEmpty){
+
         statusModel.value.updateStatus(GeneralStatus.error);
         statusModel.value.updateError('some thing error');
-        return ;
+        return;
       }
       statusModel.value.updateStatus(GeneralStatus.success);
-print(response.body);
-      List listShop=json.decode(response.body)['data']['shops'];
+      print(response.body);
+      List listShop = json.decode(response.body)['data']['shops'];
 
-      for(int i=0;i<listShop.length;i++){
-
+      for (int i = 0; i < listShop.length; i++) {
         shops.add(ShopsModel.fromJson(listShop[i]));
         // shops.add(Shops.fromJson(listShopCategory[i]));
-     print('shops$shops');
-     print('shops${listShop.length}');
+        print('shops$shops');
+        print('shops${listShop.length}');
       }
       return;
     }
     statusModel.value.updateStatus(GeneralStatus.error);
     statusModel.value.updateError('some thing error');
-
-
   }
+
   Future<void> getItemShop() async {
-    SharedPreferences prefs=await SharedPreferences.getInstance();
-    var token=prefs.getString('token');
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    var token = prefs.getString('token');
     statusModel.value.updateStatus(GeneralStatus.waiting);
     var url = Uri.parse(
-        "https://news.wasiljo.com/public/api/v1/delivery-boy/shop-subcategories");
-    var response= await http.get(url, headers: {
-    'Authorization': 'Bearer $token'});
-    if((response.statusCode>=200&& response.statusCode<300)){
-      if(response.body.isEmpty){
+        "https://admin.wasiljo.com/public/api/v1/delivery-boy/shop-subcategories");
+
+    var response =
+        await http.get(url, headers: {'Authorization': 'Bearer $token'});
+    if ((response.statusCode >= 200 && response.statusCode < 300)) {
+      if (response.body.isEmpty) {
+
         statusModel.value.updateStatus(GeneralStatus.error);
         statusModel.value.updateError('some thing error');
-        return ;
+        return;
       }
       statusModel.value.updateStatus(GeneralStatus.success);
-print(response.body);
-      List listShop=json.decode(response.body)['data']['shop'][0]['sub_category'];
+      print(response.body);
+      List listShop =
+          json.decode(response.body)['data']['shop'][0]['sub_category'];
 
-      for(int i=0;i<listShop.length;i++){
-
+      for (int i = 0; i < listShop.length; i++) {
         subcategoryShops.add(SubCategory.fromJson(listShop[i]));
         // shops.add(Shops.fromJson(listShopCategory[i]));
-     print('subcategoryShops$subcategoryShops');
-     print('subcategoryShops${listShop.length}');
+        print('subcategoryShops$subcategoryShops');
+        print('subcategoryShops${listShop.length}');
       }
       return;
     }
     statusModel.value.updateStatus(GeneralStatus.error);
     statusModel.value.updateError('some thing error');
-
-
   }
-  get isWaiting=>statusModel.value.status.value==GeneralStatus.waiting;
-  get isError=>statusModel.value.status.value==GeneralStatus.error;
-  get isSuccess=>statusModel.value.status.value==GeneralStatus.success;
+
+  get isWaiting => statusModel.value.status.value == GeneralStatus.waiting;
+  get isError => statusModel.value.status.value == GeneralStatus.error;
+  get isSuccess => statusModel.value.status.value == GeneralStatus.success;
 }
-
-
-
-
-
-
-

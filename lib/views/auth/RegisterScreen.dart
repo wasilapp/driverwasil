@@ -60,8 +60,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   TextEditingController? licence = TextEditingController();
   TextEditingController? carLicence = TextEditingController();
 
-
-
   int selectedCountryCode = 0;
   List<PopupMenuEntry<Object>>? countryList;
   List<dynamic> countryCode = TextUtils.countryCode;
@@ -132,6 +130,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       }
     });
   }
+
   Future getImageCarFromGallery() async {
     final pickedFile = await picker.pickImage(source: ImageSource.gallery);
 
@@ -164,8 +163,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
   ShopsModel? selectedShop;
 
   _handleRegister() async {
-
-
     await authController.registerUser(
       nameArabic: nameArabic!.text,
       password: password!.text,
@@ -178,7 +175,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
       mobile: contrycode.toString() + mobile!.text,
       nameEnglish: nameArabic!.text,
       carNum: carNumber!.text,
-      shopId:  selectedShop==null?'':selectedShop!.id,
+      shopId: selectedShop == null ? '' : selectedShop!.id,
       categoryId: selectedCategory!.id,
     );
   }
@@ -187,7 +184,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   @override
   Widget build(BuildContext context) {
-
     return Consumer<AppThemeNotifier>(
       builder: (BuildContext context, AppThemeNotifier value, Widget? child) {
         int themeType = value.themeMode();
@@ -204,7 +200,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 // LogoAsset(),
                 Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: 5.0.w),
+                  padding: EdgeInsets.symmetric(horizontal: 5.0.w),
                   child: Text(
                     Translator.translate("create_account").toUpperCase(),
                     style: boldPrimary,
@@ -282,7 +278,6 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 ),
                 Expanded(
                   child: CustomTextField(
-
                     keyBoard: TextInputType.emailAddress,
                     controller: email!,
                     hintText: Translator.translate("Email"),
@@ -312,10 +307,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 CustomTextField(
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return Translator.translate('Please enter your shop Name Arabic');
+                      return Translator.translate(
+                          'Please enter your shop Name Arabic');
                     }
                     if (!RegExp(r'^[؀-ۿ\s]+$').hasMatch(value!)) {
-                      return Translator.translate('please only character in Arabic');
+                      return Translator.translate(
+                          'please only character in Arabic');
                     }
                   },
                   keyBoard: TextInputType.text,
@@ -329,7 +326,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 CustomTextField(
                   validator: (value) {
                     if (profilePic == null) {
-                      return Translator.translate('Please enter your profilePic');
+                      return Translator.translate(
+                          'Please enter your profilePic');
                     }
                   },
                   controller: profile!,
@@ -349,7 +347,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 CustomTextField(
                   validator: (value) {
                     if (licencePic == null) {
-                      return Translator.translate('Please enter your licencePic');
+                      return Translator.translate(
+                          'Please enter your licencePic');
                     }
                   },
                   controller: licence!,
@@ -387,7 +386,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         value: selectedCategory,
                         borderRadius: BorderRadius.circular(20),
                         dropdownColor: Colors.white,
-                        hint: Text(Translator.translate('please select category')),
+                        hint: Text(
+                            Translator.translate('please select category')),
                         // Set a default value if needed.
                         onChanged: (Categories? newValue) {
                           setState(() {
@@ -430,7 +430,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   value: selectedShop,
                                   borderRadius: BorderRadius.circular(20),
                                   dropdownColor: Colors.white,
-                                  hint: Text(Translator.translate('please select shop')),
+                                  hint: Text(Translator.translate(
+                                      'please select shop')),
                                   // Set a default value if needed.
                                   onChanged: (ShopsModel? newValue) {
                                     setState(() {
@@ -472,7 +473,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               CustomTextField(
                                 validator: (value) {
                                   if (car_license == null) {
-                                    return Translator.translate('Please enter your car_license');
+                                    return Translator.translate(
+                                        'Please enter your car_license');
                                   }
                                 },
                                 controller: carLicence!,
@@ -492,16 +494,19 @@ class _RegisterScreenState extends State<RegisterScreen> {
                               CustomTextField(
                                 validator: (value) {
                                   if (value == null || value.isEmpty) {
-                                    return Translator.translate('Please enter your agency Name Arabic');
+                                    return Translator.translate(
+                                        'Please enter your agency Name Arabic');
                                   }
                                   if (!RegExp(r'^[؀-ۿ\s]+$').hasMatch(value!)) {
-                                    return Translator.translate('please only character in Arabic');
+                                    return Translator.translate(
+                                        'please only character in Arabic');
                                   }
                                 },
                                 keyBoard: TextInputType.text,
                                 controller: nameAgencyArabic!,
                                 hintText: Translator.translate(
-                                  Translator.translate("agency name in arabic")),
+                                    Translator.translate(
+                                        "agency name in arabic")),
                                 prefixIconData: Icon(Icons.home_work_outlined),
                                 onPrefixIconPress: () {
                                   setState(() {});
@@ -512,7 +517,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 CustomTextField(
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return  Translator.translate('Please enter your car number');
+                      return Translator.translate(
+                          'Please enter your car number');
                     }
                   },
                   keyBoard: TextInputType.text,
@@ -526,10 +532,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
                 CustomTextField(
                   validator: (value) {
                     if (value == null || value.isEmpty) {
-                      return Translator.translate('Please enter your  password');
+                      return Translator.translate(
+                          'Please enter your  password');
                     }
                     if (value.length <= 8) {
-                      return Translator.translate('password length at least 8 character');
+                      return Translator.translate(
+                          'password length at least 8 character');
                     }
                   },
                   keyBoard: TextInputType.text,
@@ -543,38 +551,41 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     });
                   },
                 ),
-                authController.erroeMsg.length==0?Text('')     :  Obx(() => Container(
-                      margin: EdgeInsets.symmetric(horizontal:  20, vertical: 10),
-
-                      child: authController.erroeMsg.isNotEmpty
-                          ? ListView.builder(shrinkWrap: true,
-                              itemCount: authController.erroeMsg.length,
-                              itemBuilder: (context, index) {
-                                return Row(
-                                  children: [
-                                    Icon(
-                                      Icons.error_outline,
-                                      color: Colors.red,
-                                    ),
-                                    SizedBox(
-                                      width: 5,
-                                    ),
-                                    Text(
-                                      authController.erroeMsg[index],
-                                      softWrap: false,
-                                      style: TextStyle(
-                                        overflow: TextOverflow.ellipsis,
-                                        color: Colors.red,
-                                      ),
-                                    ),
-                                  ],
-                                );
-                              },
-                            )
-                          : Text(''),
-                    )),
+                authController.erroeMsg.length == 0
+                    ? Text('')
+                    : Obx(() => Container(
+                          margin: EdgeInsets.symmetric(
+                              horizontal: 20, vertical: 10),
+                          child: authController.erroeMsg.isNotEmpty
+                              ? ListView.builder(
+                                  shrinkWrap: true,
+                                  itemCount: authController.erroeMsg.length,
+                                  itemBuilder: (context, index) {
+                                    return Row(
+                                      children: [
+                                        Icon(
+                                          Icons.error_outline,
+                                          color: Colors.red,
+                                        ),
+                                        SizedBox(
+                                          width: 5,
+                                        ),
+                                        Text(
+                                          authController.erroeMsg[index],
+                                          softWrap: false,
+                                          style: TextStyle(
+                                            overflow: TextOverflow.ellipsis,
+                                            color: Colors.red,
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  },
+                                )
+                              : Text(''),
+                        )),
                 Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: 2.0.w),
+                  padding: EdgeInsets.symmetric(horizontal: 2.0.w),
                   child: CommonViews().createButton(
                     title: Translator.translate('Create account'),
                     onPressed: () async {
@@ -751,6 +762,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           );
         });
   }
+
   void showImagePicker3(BuildContext context) {
     showModalBottomSheet(
         context: context,
@@ -819,7 +831,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
 
   Future<void> registerUser() async {
     final registrationUrl = Uri.parse(
-        'https://news.wasiljo.com/public/api/v1/delivery-boy/register'); // Replace with your actual API URL
+        'https://admin.wasiljo.com/public/api/v1/delivery-boy/register'); // Replace with your actual API URL
 
     // Define the user data as a map
     final userData = {

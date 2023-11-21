@@ -4,7 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:http/http.dart' as http;
 
 class Api {
-  static const String BASE_URL = "https://news.wasiljo.com/public/";
+  static const String BASE_URL = "https://admin.wasiljo.com/public/";
   Future<dynamic> get({required String url, @required String? token}) async {
     Map<String, String> headers = {};
 
@@ -23,8 +23,8 @@ class Api {
 
   Future<dynamic> post(
       {required String url,
-        @required dynamic body,
-        @required String? token}) async {
+      @required dynamic body,
+      @required String? token}) async {
     Map<String, String> headers = {};
 
     if (token != null) {
@@ -32,12 +32,12 @@ class Api {
     }
     print("body${body}");
     print("url${url}");
-    http.Response response =
-    await http.post(Uri.parse(url), body: jsonEncode(body), headers: headers);
+    http.Response response = await http.post(Uri.parse(url),
+        body: jsonEncode(body), headers: headers);
 
     if (response.statusCode == 200) {
-    var data = response.body;
-print("yesss");
+      var data = response.body;
+      print("yesss");
       print("data${data}");
       return data;
     } else {
@@ -49,8 +49,8 @@ print("yesss");
 
   Future<dynamic> put(
       {required String url,
-        @required dynamic body,
-        @required String? token}) async {
+      @required dynamic body,
+      @required String? token}) async {
     Map<String, String> headers = {};
     headers.addAll({'Content-Type': 'application/x-www-form-urlencoded'});
     if (token != null) {
@@ -59,7 +59,7 @@ print("yesss");
 
     print('url = $url body = $body token = $token ');
     http.Response response =
-    await http.put(Uri.parse(url), body: body, headers: headers);
+        await http.put(Uri.parse(url), body: body, headers: headers);
     if (response.statusCode == 200) {
       Map<String, dynamic> data = jsonDecode(response.body);
       print(data);

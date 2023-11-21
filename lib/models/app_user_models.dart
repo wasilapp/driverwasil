@@ -51,7 +51,7 @@ class Data {
 }
 
 class DeliveryBoy {
-  int? id;
+  num? id;
   Name? name;
   String? agencyName;
   String? carNumber;
@@ -59,30 +59,30 @@ class DeliveryBoy {
   String? emailVerifiedAt;
   String? password;
   String? fcmToken;
-  String? latitude;
-  String? longitude;
-  int? isFree;
-  int? isOffline;
-  int? isActive;
+  double? latitude;
+  double? longitude;
+  num? isFree;
+  num? isOffline;
+  num? isActive;
   String? avatarUrl;
   String? mobile;
-  int? mobileVerified;
-  int? rating;
-  int? totalRating;
-  int? categoryId;
-  int? shopId;
+  num? mobileVerified;
+  double? rating;
+  double? totalRating;
+  num? categoryId;
+  num? shopId;
   String? rememberToken;
-  int? isVerified;
+  double? isVerified;
   String? drivingLicense;
   String? carLicense;
-  int? isApproval;
-  int? distance;
+  double? isApproval;
+  double? distance;
   String? otp;
-  int? totalCapacity;
-  int? totalQuantity;
-  int? availableQuantity;
+  double? totalCapacity;
+  double? totalQuantity;
+  double? availableQuantity;
   String? referrer;
-  String? referrerLink;
+  dynamic? referrerLink;
   String? createdAt;
   String? updatedAt;
   Category? category;
@@ -229,18 +229,18 @@ class Name {
 }
 
 class Category {
-  int? id;
+  num? id;
   Name? title;
   Name? description;
-  int? commesion;
+  double? commesion;
   String? imageUrl;
   String? type;
-  int? deliveryFee;
+  double? deliveryFee;
   String? expeditedFees;
   String? schedulerFees;
   String? startWorkTime;
   String? endWorkTime;
-  int? active;
+  num? active;
   String? createdAt;
   String? updatedAt;
 

@@ -138,7 +138,7 @@
 //   Future<void> fetchShops() async {
 //     try {
 //       // Make a GET request to the API URL
-//       final response = await Dio().get("https://news.wasiljo.com/public/api/v1/delivery-boy/categories");
+//       final response = await Dio().get("https://admin.wasiljo.com/public/api/v1/delivery-boy/categories");
 //
 //       // Check if the response status code is 200 (OK)
 //       if (response.statusCode == 200) {

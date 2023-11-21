@@ -37,7 +37,7 @@ cancelled_by_driver = 12*/
 
     statusModel.value.updateStatus(GeneralStatus.waiting);
     var url = Uri.parse(
-        'https://news.wasiljo.com/public/api/v1/delivery-boy/orders/$status/scheduled/get');
+        'https://admin.wasiljo.com/public/api/v1/delivery-boy/orders/$status/scheduled/get');
     var response = await http.get(url, headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -77,9 +77,9 @@ cancelled_by_driver = 12*/
     String? token = await controller.getApiToken();
     statusModel.value.updateStatus(GeneralStatus.waiting);
     print(
-        'https://news.wasiljo.com/public/api/v1/delivery-boy/order/$orderId/$status');
+        'https://admin.wasiljo.com/public/api/v1/delivery-boy/order/$orderId/$status');
     var url = Uri.parse(
-        'https://news.wasiljo.com/public/api/v1/delivery-boy/order/$orderId/$status');
+        'https://admin.wasiljo.com/public/api/v1/delivery-boy/order/$orderId/$status');
     var response = await http.post(url, headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',
@@ -159,7 +159,7 @@ cancelled_by_driver = 12*/
     statusModel.value.updateStatus(GeneralStatus.waiting);
 
     var url =
-        Uri.parse('https://news.wasiljo.com/public/api/v1/delivery-boy/show');
+        Uri.parse('https://admin.wasiljo.com/public/api/v1/delivery-boy/show');
     var response = await http.post(url, headers: {
       'Accept': 'application/json',
       'Content-Type': 'application/json',

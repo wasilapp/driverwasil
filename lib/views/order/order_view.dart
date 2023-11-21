@@ -31,6 +31,8 @@ class HomeScreen extends StatefulWidget {
   State<HomeScreen> createState() => _HomeScreenState();
 }
 
+int driverStatus = 0;
+
 class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late FirestoreServices firestoreServices;
@@ -82,267 +84,291 @@ class _HomeScreenState extends State<HomeScreen>
   Widget build(BuildContext context) {
     return SafeArea(
         child: Scaffold(
+      floatingActionButton: InkWell(
+        onTap: () {
+          if (driverStatus == 0) {
+            data = Location.instance.getLocation().asStream();
+            data!.listen((event) {
+              // appUserData.data!.deliveryBoy!.latitude =
+              //     event.latitude!.toString();
+              // appUserData.data!.deliveryBoy!.longitude =
+              //     event.longitude!.toString();
+              Get.log(appUserData.data!.token!);
+              appUserData.data!.deliveryBoy!.isActive = driverStatus;
+              setState(() {
+                driverStatus = 1;
+              });
+              Get.find<AuthControllerr>().saveDeliveryBoyData(appUserData);
+            });
+          } else {
+            appUserData.data!.deliveryBoy!.isActive = driverStatus;
+            setState(() {
+              driverStatus = 1;
+            });
+            Get.find<AuthControllerr>().saveDeliveryBoyData(appUserData);
+          }
+        },
+        child: Container(
+          margin: EdgeInsets.only(left: 16, right: 16, bottom: 16),
+          width: MediaQuery.sizeOf(context).width,
+          height: 60,
+          decoration: BoxDecoration(
+            color: primaryColor,
+            borderRadius: BorderRadius.circular(15),
+          ),
+          child: Center(
+            child: Text(
+              driverStatus == 0 ? 'Online' : 'Offline',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ),
+      ),
+      floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
       appBar: AppBar(
         elevation: 0,
-        actions: [
-          Text('online'),
-          Switch(
-              value: switchData,
-              onChanged: (value) {
-                setState(() {
-                  switchData = value;
-                });
-                data = Location.instance.getLocation().asStream();
-                data!.listen((event) {
-                  appUserData.data!.deliveryBoy!.latitude =
-                      event.latitude!.toString();
-                  appUserData.data!.deliveryBoy!.longitude =
-                      event.longitude!.toString();
-                  Get.log(appUserData.data!.token!);
-                  Get.find<AuthControllerr>().saveDeliveryBoyData(appUserData);
-                });
-
-                Get.log(value.toString());
-                if (value) {
-                } else {}
-              }),
-        ],
       ),
-    drawer: Drawer(
-    backgroundColor: primaryColor,
-    width: 250,
-    child: Column(
-    children: [
-    SizedBox(
-    height: 20,
-    ),
-    Padding(
-    padding: const EdgeInsets.symmetric(horizontal: 10.0),
-    child: Row(
-    children: [
-    // InkWell(
-    //   onTap:(){
-    //    // _getImage();
-    //   },
-    //   child: Container(
-    //     child: ClipRRect(
-    //       borderRadius: BorderRadius.all(
-    //           Radius.circular(MySize.getScaledSizeWidth(60))),
-    //       child: imageFile==null ?  ImageUtils.getImageFromNetwork(
-    //           deliveryBoy!.getAvatarUrl(),
-    //           width: 50,
-    //           height: 50) :  Image.file(
-    //         imageFile!,
-    //         height: MySize.getScaledSizeWidth(120),
-    //         width: MySize.getScaledSizeWidth(120),
-    //         fit: BoxFit.cover,
-    //       ),
-    //     ),
-    //   ),
-    // ),
-    SizedBox(
-    width: 20,
-    ),
-    Column(
-    crossAxisAlignment: CrossAxisAlignment.start,
-    children: [
-    // Text(deliveryBoy!.agencyName!,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20)),
-    // Text(deliveryBoy!.email!,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 10)),
-    ],
-    ),
-    ],
-    ),
-    ),
-    SizedBox(
-    height: 20,
-    ),
-    ListTile(
-    visualDensity: VisualDensity.compact,
-    onTap: () {
-    Navigator.push(
-    context,
-    MaterialPageRoute(
-    builder: (BuildContext context) => HomeScreen(),
-    ),
-    );
-    },
-    leading: Icon(
-    MdiIcons.shopping,
-    color: backgroundColor,
-    ),
-    title: Text(
-    Translator.translate("Order"),
-    style: TextStyle(
-    color: backgroundColor, fontWeight: FontWeight.w600),
-    ),
-    trailing: Icon(MdiIcons.chevronRight, color: backgroundColor),
-    ),
-    SizedBox(
-    height: 15,
-    ),   ListTile(
-    visualDensity: VisualDensity.compact,
-    onTap: () {
-    Navigator.push(
-    context,
-    MaterialPageRoute(
-    builder: (BuildContext context) => ProfileScreen(),
-    ),
-    );
-    },
-    leading: Icon(
-    Icons.person,
-    color: backgroundColor,
-    ),
-    title: Text(
-    Translator.translate("Profile"),
-    style: TextStyle(
-    color: backgroundColor, fontWeight: FontWeight.w600),
-    ),
-    trailing: Icon(MdiIcons.chevronRight, color: backgroundColor),
-    ),
-    SizedBox(
-    height: 15,
-    ),
-    ListTile(
-    visualDensity: VisualDensity.compact,
-    onTap: () {
-    Navigator.push(
-    context,
-    MaterialPageRoute(
-    builder: (BuildContext context) => CategoryScreen(),
-    ),
-    );
-    },
-    leading: Icon(
-    MdiIcons.shopping,
-    color: backgroundColor,
-    ),
-    title: Text(
-    Translator.translate("Category"),
-    style: TextStyle(
-    color: backgroundColor, fontWeight: FontWeight.w600),
-    ),
-    trailing: Icon(MdiIcons.chevronRight, color: backgroundColor),
-    ),
-    SizedBox(
-    height: 15,
-    ),
-    ListTile(
-    visualDensity: VisualDensity.compact,
-    onTap: () {
-    Navigator.push(
-    context,
-    MaterialPageRoute(
-    builder: (BuildContext context) => EditProfileScreen(),
-    ),
-    );
-    },
-    leading: Icon(
-    Icons.edit,
-    color: backgroundColor,
-    ),
-    title: Text(
-    Translator.translate("EditProfileScreen"),
-    style: TextStyle(
-    color: backgroundColor, fontWeight: FontWeight.w600),
-    ),
-    trailing: Icon(MdiIcons.chevronRight, color: backgroundColor),
-    ),
-    SizedBox(
-    height: 15,
-    ),
-    // ListTile(
-    //   visualDensity: VisualDensity.compact,
-    //   onTap: () {
-    //     showDialog(
-    //         context: context,
-    //         builder: (BuildContext context) => SelectLanguageDialog());
-    //   },
-    //   leading: Icon(
-    //     MdiIcons.translate,
-    //     color: backgroundColor,
-    //   ),
-    //   title: Text(
-    //     Translator.translate("select_language"),
-    //     style: TextStyle(
-    //         color: backgroundColor, fontWeight: FontWeight.w600),
-    //   ),
-    //   trailing: Icon(MdiIcons.chevronRight, color: backgroundColor),
-    // ),
+      drawer: Drawer(
+        backgroundColor: primaryColor,
+        width: 250,
+        child: Column(
+          children: [
+            SizedBox(
+              height: 20,
+            ),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 10.0),
+              child: Row(
+                children: [
+                  // InkWell(
+                  //   onTap:(){
+                  //    // _getImage();
+                  //   },
+                  //   child: Container(
+                  //     child: ClipRRect(
+                  //       borderRadius: BorderRadius.all(
+                  //           Radius.circular(MySize.getScaledSizeWidth(60))),
+                  //       child: imageFile==null ?  ImageUtils.getImageFromNetwork(
+                  //           deliveryBoy!.getAvatarUrl(),
+                  //           width: 50,
+                  //           height: 50) :  Image.file(
+                  //         imageFile!,
+                  //         height: MySize.getScaledSizeWidth(120),
+                  //         width: MySize.getScaledSizeWidth(120),
+                  //         fit: BoxFit.cover,
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+                  SizedBox(
+                    width: 20,
+                  ),
+                  Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      // Text(deliveryBoy!.agencyName!,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 20)),
+                      // Text(deliveryBoy!.email!,style: TextStyle(color: Colors.white,fontWeight: FontWeight.bold,fontSize: 10)),
+                    ],
+                  ),
+                ],
+              ),
+            ),
+            SizedBox(
+              height: 20,
+            ),
+            ListTile(
+              visualDensity: VisualDensity.compact,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => HomeScreen(),
+                  ),
+                );
+              },
+              leading: Icon(
+                MdiIcons.shopping,
+                color: backgroundColor,
+              ),
+              title: Text(
+                Translator.translate("Order"),
+                style: TextStyle(
+                    color: backgroundColor, fontWeight: FontWeight.w600),
+              ),
+              trailing: Icon(MdiIcons.chevronRight, color: backgroundColor),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            ListTile(
+              visualDensity: VisualDensity.compact,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => ProfileScreen(),
+                  ),
+                );
+              },
+              leading: Icon(
+                Icons.person,
+                color: backgroundColor,
+              ),
+              title: Text(
+                Translator.translate("Profile"),
+                style: TextStyle(
+                    color: backgroundColor, fontWeight: FontWeight.w600),
+              ),
+              trailing: Icon(MdiIcons.chevronRight, color: backgroundColor),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            ListTile(
+              visualDensity: VisualDensity.compact,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => CategoryScreen(),
+                  ),
+                );
+              },
+              leading: Icon(
+                MdiIcons.shopping,
+                color: backgroundColor,
+              ),
+              title: Text(
+                Translator.translate("Category"),
+                style: TextStyle(
+                    color: backgroundColor, fontWeight: FontWeight.w600),
+              ),
+              trailing: Icon(MdiIcons.chevronRight, color: backgroundColor),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            ListTile(
+              visualDensity: VisualDensity.compact,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => EditProfileScreen(),
+                  ),
+                );
+              },
+              leading: Icon(
+                Icons.edit,
+                color: backgroundColor,
+              ),
+              title: Text(
+                Translator.translate("EditProfileScreen"),
+                style: TextStyle(
+                    color: backgroundColor, fontWeight: FontWeight.w600),
+              ),
+              trailing: Icon(MdiIcons.chevronRight, color: backgroundColor),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+            // ListTile(
+            //   visualDensity: VisualDensity.compact,
+            //   onTap: () {
+            //     showDialog(
+            //         context: context,
+            //         builder: (BuildContext context) => SelectLanguageDialog());
+            //   },
+            //   leading: Icon(
+            //     MdiIcons.translate,
+            //     color: backgroundColor,
+            //   ),
+            //   title: Text(
+            //     Translator.translate("select_language"),
+            //     style: TextStyle(
+            //         color: backgroundColor, fontWeight: FontWeight.w600),
+            //   ),
+            //   trailing: Icon(MdiIcons.chevronRight, color: backgroundColor),
+            // ),
 
-    // ListTile(
-    //   visualDensity: VisualDensity.compact,
-    //   onTap: () {
-    //     showDialog(
-    //         context: context,
-    //         builder: (BuildContext context) => SelectThemeDialog());
-    //   },
-    //   leading: Icon(
-    //     MdiIcons.eyeOutline,
-    //     color: backgroundColor,
-    //   ),
-    //   title: Text(
-    //     Translator.translate("Theme"),
-    //     style: TextStyle(
-    //         color: backgroundColor, fontWeight: FontWeight.w600),
-    //   ),
-    //   trailing: Icon(MdiIcons.chevronRight, color: backgroundColor),
-    // ),
-    SizedBox(
-    height: 15,
-    ),
-    ListTile(
-    visualDensity: VisualDensity.compact,
-    onTap: () {
-    Navigator.push(
-    context,
-    MaterialPageRoute(
-    builder: (BuildContext context) => TransactionScreen(),
-    ),
-    );
-    },
-    leading: Icon(
-    MdiIcons.currencyUsd,
-    color: backgroundColor,
-    ),
-    title: Text(
-    Translator.translate("Transaction"),
-    style: TextStyle(
-    color: backgroundColor, fontWeight: FontWeight.w600),
-    ),
-    trailing: Icon(MdiIcons.chevronRight, color: backgroundColor),
-    ),
-    Spacer(),
-    Divider(
-    color: backgroundColor,
-    ),
-    ListTile(
-    visualDensity: VisualDensity.compact,
-    onTap: () async {
-    HomeScreen();
+            // ListTile(
+            //   visualDensity: VisualDensity.compact,
+            //   onTap: () {
+            //     showDialog(
+            //         context: context,
+            //         builder: (BuildContext context) => SelectThemeDialog());
+            //   },
+            //   leading: Icon(
+            //     MdiIcons.eyeOutline,
+            //     color: backgroundColor,
+            //   ),
+            //   title: Text(
+            //     Translator.translate("Theme"),
+            //     style: TextStyle(
+            //         color: backgroundColor, fontWeight: FontWeight.w600),
+            //   ),
+            //   trailing: Icon(MdiIcons.chevronRight, color: backgroundColor),
+            // ),
+            SizedBox(
+              height: 15,
+            ),
+            ListTile(
+              visualDensity: VisualDensity.compact,
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => TransactionScreen(),
+                  ),
+                );
+              },
+              leading: Icon(
+                MdiIcons.currencyUsd,
+                color: backgroundColor,
+              ),
+              title: Text(
+                Translator.translate("Transaction"),
+                style: TextStyle(
+                    color: backgroundColor, fontWeight: FontWeight.w600),
+              ),
+              trailing: Icon(MdiIcons.chevronRight, color: backgroundColor),
+            ),
+            Spacer(),
+            Divider(
+              color: backgroundColor,
+            ),
+            ListTile(
+              visualDensity: VisualDensity.compact,
+              onTap: () async {
+                HomeScreen();
 
-    await AuthController.logoutUser();
-    Navigator.pushReplacement(
-    context,
-    MaterialPageRoute(
-    builder: (BuildContext context) => LoginScreen(),
-    ),
-    );
-    },
-    leading: Icon(
-    MdiIcons.logoutVariant,
-    color: backgroundColor,
-    ),
-    title: Text(
-    Translator.translate("Logout"),
-    style: TextStyle(
-    color: backgroundColor, fontWeight: FontWeight.w600),
-    ),
-    ),
-    SizedBox(
-    height: 15,
-    ),
-    ],),),
+                await AuthController.logoutUser();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (BuildContext context) => LoginScreen(),
+                  ),
+                );
+              },
+              leading: Icon(
+                MdiIcons.logoutVariant,
+                color: backgroundColor,
+              ),
+              title: Text(
+                Translator.translate("Logout"),
+                style: TextStyle(
+                    color: backgroundColor, fontWeight: FontWeight.w600),
+              ),
+            ),
+            SizedBox(
+              height: 15,
+            ),
+          ],
+        ),
+      ),
       body:
           // Content for Tab 1
           authControllerr.boysDeliveryData?.data?.deliveryBoy?.categoryId == 2

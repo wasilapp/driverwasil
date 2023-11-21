@@ -27,7 +27,7 @@ enum AuthType { VERIFIED, LOGIN, NOT_FOUND }
 
 class AuthControllerr extends GetxController {
   String loginUrl =
-      'https://news.wasiljo.com/public/api/v1/delivery-boy/login?lang=ar';
+      'https://admin.wasiljo.com/public/api/v1/delivery-boy/login?lang=ar';
   @override
   void onInit() async {
     if (token.isNotEmpty) {
@@ -45,7 +45,7 @@ class AuthControllerr extends GetxController {
     super.onInit();
   }
 
- var erroeMsg = [].obs;
+  var erroeMsg = [].obs;
   var erroeText = ''.obs;
   TextEditingController passwordTFController = TextEditingController();
   TextEditingController numberController = TextEditingController();
@@ -120,7 +120,7 @@ class AuthControllerr extends GetxController {
 
       // Get a reference to the Firestore collection for delivery boys
       CollectionReference deliveryBoys =
-          FirebaseFirestore.instance.collection('deliveryBoys');  
+          FirebaseFirestore.instance.collection('deliveryBoys');
 
       // Add the delivery boy data to Firestore
       await deliveryBoys.doc(data.data?.deliveryBoy?.id.toString()).set({
@@ -173,7 +173,7 @@ class AuthControllerr extends GetxController {
     String? fcmToken = await pushNotificationsManager.getToken();
 
     String updateUrl =
-        'https://news.wasiljo.com/public/api/v1/delivery-boy/update_profile';
+        'https://admin.wasiljo.com/public/api/v1/delivery-boy/update_profile';
 
     //Body data
     Map data = {
@@ -346,7 +346,9 @@ class AuthControllerr extends GetxController {
       'Accept': 'application/json',
       'Content-Type': 'application/json'
     };
-    var request = http.MultipartRequest('POST', Uri.parse('https://news.wasiljo.com/public/api/v1/delivery-boy/register?lang=ar'));
+
+    var request = http.MultipartRequest('POST', Uri.parse('https://admin.wasiljo.com/public/api/v1/delivery-boy/register?lang=ar'));
+
 
     request.fields.addAll({
       'name[en]': nameArabic,
@@ -356,14 +358,16 @@ class AuthControllerr extends GetxController {
       'password': password,
       'category_id': categoryId.toString(),
       'car_number': carNum,
-      'email':email,
+      'email': email,
       'shop_id': shopId.toString(),
       'agency_name[en]': agencyArabic,
       'agency_name[ar]': agencyArabic
     });
-    request.files.add(await http.MultipartFile.fromPath('driving_license', profilePic!.path));
-    request.files.add(await http.MultipartFile.fromPath('avatar_url', drivingLicense!.path));
-    car==null?'': request.files.add(await http.MultipartFile.fromPath('car_license', car!.path));
+
+    request.files.add(await http.MultipartFile.fromPath('car_license', drivingLicense!.path));
+    request.files.add(await http.MultipartFile.fromPath('avatar_url', profilePic!.path));
+    car==null?'': request.files.add(await http.MultipartFile.fromPath('driving_license', car!.path));
+
     request.headers.addAll(headers);
 
     http.StreamedResponse response = await request.send();
@@ -372,9 +376,7 @@ class AuthControllerr extends GetxController {
       erroeMsg.value.clear();
       print(await response.stream.bytesToString());
       Get.offAll(LoginScreen());
-
-    }
-    else {
+    } else {
       // If the response status code is not 200, print the error messages
       String responseBody = await response.stream.bytesToString();
       print(responseBody);
@@ -384,7 +386,7 @@ class AuthControllerr extends GetxController {
         Map<String, dynamic> jsonResponse = json.decode(responseBody);
         if (jsonResponse.containsKey('error')) {
           // If the 'error' key exists, print the error messages
-          erroeMsg.value= List<String>.from(jsonResponse['error']);
+          erroeMsg.value = List<String>.from(jsonResponse['error']);
           print('Error messages: $erroeMsg.value');
         }
       } catch (e) {
@@ -403,7 +405,7 @@ class AuthControllerr extends GetxController {
 //     // log("device token is : ${fcmToken.toString()}");
 //
 //     String registerUrl =
-//         'https://news.wasiljo.com/public/api/v1/delivery-boy/register?lang=ar';
+//         'https://admin.wasiljo.com/public/api/v1/delivery-boy/register?lang=ar';
 //
 //     final dio = Dio();
 //
@@ -734,7 +736,7 @@ class AuthControllerr extends GetxController {
   //     String? mobile, String? password, File? imageFile,String ?nameEn,String? nameAr,String ?distance}) async {
   //
   //    String? token = await getApiToken();
-  //   var registerUrl =Uri.parse('https://news.wasiljo.com/public/api/v1/delivery-boy/register');
+  //   var registerUrl =Uri.parse('https://admin.wasiljo.com/public/api/v1/delivery-boy/register');
   //   Map data = {};
   //   if (mobile!.isNotEmpty) data['mobile'] = mobile;
   //   if (mobile.isNotEmpty) data['distance'] = distance;
