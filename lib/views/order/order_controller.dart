@@ -99,7 +99,7 @@ cancelled_by_driver = 12*/
       print(response.body);
 
       statusModel.value.updateStatus(GeneralStatus.success);
-
+      update();
       return;
     }
     if (response.statusCode == 400) {

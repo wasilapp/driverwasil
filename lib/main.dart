@@ -25,7 +25,7 @@ import 'controllers/AuthController.dart' as con;
 import 'models/AppData.dart';
 import 'models/MyResponse.dart';
 
-String token = '';
+String? token;
 DeliveryBoy? user;
 final storage = GetStorage();
 Future<void> main() async {
@@ -94,7 +94,7 @@ class _MyHomePageState extends State<MyHomePage> {
   @override
   void initState() {
     super.initState();
-    getAppData();
+    // getAppData();
     // initFCM();
   }
 
@@ -134,20 +134,24 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
-    Get.lazyPut(() => AuthControllerr());
-    AuthControllerr controller = Get.put(AuthControllerr());
+    // Get.lazyPut(() => AuthControllerr());
+    AuthControllerr controller = Get.find();
     MySize().init(context);
     themeData = Theme.of(context);
     return FutureBuilder<AuthType>(
         future: controller.userAuthType(),
         builder: (context, AsyncSnapshot<AuthType> snapshot) {
           if (snapshot.hasData) {
-            if (snapshot.data == AuthType.VERIFIED ||
-                token.isNotEmpty == true) {
+            if (snapshot.data == AuthType.VERIFIED &&
+                token!.isNotEmpty == true) {
               return HomeScreen();
-            } else if (snapshot.data == AuthType.LOGIN ||
-                token.isNotEmpty == true) {
+            } else if (snapshot.data == AuthType.LOGIN &&
+                token!.isNotEmpty == true) {
               return HomeScreen();
+            } else if (snapshot.data == AuthType.NOT_FOUND &&
+                token == null &&
+                token!.isEmpty == true) {
+              return LoginScreen();
             } else {
               return LoginScreen();
             }

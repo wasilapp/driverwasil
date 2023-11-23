@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import '../../services/AppLocalizations.dart';
 import '../SizeConfig.dart';
 
-
 class CustomTextField extends StatefulWidget {
   final String hintText;
   final Widget prefixIconData;
@@ -19,20 +18,19 @@ class CustomTextField extends StatefulWidget {
   final TextInputFormatter? inputFormatter;
 
   CustomTextField(
-      {
-        Key? key,
-        required this.hintText,
-        required this.controller,
-        required this.keyBoard,
-        required this.prefixIconData,
-        this.suffixIconData,
-        //Icons.visibility_off,
-        this.onPrefixIconPress,
-        this.press,
-        this.isPassword = false,
-        this.readOnly = false,
-        this.validator,
-        this.inputFormatter})
+      {Key? key,
+      required this.hintText,
+      required this.controller,
+      required this.keyBoard,
+      required this.prefixIconData,
+      this.suffixIconData,
+      //Icons.visibility_off,
+      this.onPrefixIconPress,
+      this.press,
+      this.isPassword = false,
+      this.readOnly = false,
+      this.validator,
+      this.inputFormatter})
       : super(key: key);
 
   @override
@@ -56,14 +54,13 @@ class _CustomTextFieldState extends State<CustomTextField> {
     return Container(
       margin: Spacing.fromLTRB(24, 16, 24, 0),
       child: TextFormField(
-
         keyboardType: widget.keyBoard,
         inputFormatters:
-        widget.inputFormatter != null ? [widget.inputFormatter!] : null,
+            widget.inputFormatter != null ? [widget.inputFormatter!] : null,
         // Apply the input formatter if provided
         validator: widget.validator,
         onTap: () {
-          widget.press!();
+          widget.press != null ? widget.press!() : () {};
         },
         readOnly: widget.readOnly,
         obscureText: widget.isPassword,
@@ -72,7 +69,6 @@ class _CustomTextFieldState extends State<CustomTextField> {
             // color: themeData.colorScheme.onBackground,
             fontWeight: FontWeight.w500),
         decoration: InputDecoration(
-
           hintStyle: const TextStyle(
               letterSpacing: 0.1,
               //   color: themeData.colorScheme.onBackground,

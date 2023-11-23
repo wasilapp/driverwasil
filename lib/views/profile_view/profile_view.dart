@@ -22,7 +22,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     getDriver();
   }
 
-
   getDriver() async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     var token = prefs.getString('token');
@@ -45,41 +44,43 @@ class _ProfileScreenState extends State<ProfileScreen> {
     }
   }
 
-  var onn = 1;
-  bool open = false;
+  // var onn = 1;
+  // bool open = false;
 
-  updateStatus(status) async {
-    print("""""$status""");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    var bearerToken = prefs.getString('token');
-    var headers = {
-      'Content-Type': 'application/json',
-      'Authorization': 'Bearer $bearerToken'
-    };
+  // updateStatus(status) async {
+  //   print("""""$status""");
+  //   SharedPreferences prefs = await SharedPreferences.getInstance();
+  //   var bearerToken = prefs.getString('token');
+  //   var headers = {
+  //     'Content-Type': 'application/json',
+  //     'Authorization': 'Bearer $bearerToken'
+  //   };
 
-    var request = http.Request('PUT', Uri.parse('https://admin.wasiljo.com/public/api/v1/delivery-boy/update_profile'));
+  //   var request = http.Request(
+  //       'PUT',
+  //       Uri.parse(
+  //           'https://admin.wasiljo.com/public/api/v1/delivery-boy/update_profile'));
 
+  //   request.body = json.encode({
+  //     // "manager": {
+  //     //   "name": {
+  //     //     "en": mangerNameEnglish!.text,
+  //     //     "ar": mangerNameArabic!.text
+  //     //   }
+  //     // },
+  //     "is_offline": status,
+  //     // "distance":distance!.text
+  //   });
+  //   request.headers.addAll(headers);
 
-    request.body = json.encode({
-      // "manager": {
-      //   "name": {
-      //     "en": mangerNameEnglish!.text,
-      //     "ar": mangerNameArabic!.text
-      //   }
-      // },
-      "is_offline": status,
-      // "distance":distance!.text
-    });
-    request.headers.addAll(headers);
+  //   http.StreamedResponse response = await request.send();
 
-    http.StreamedResponse response = await request.send();
-
-    if (response.statusCode == 200) {
-      print(await response.stream.bytesToString());
-    } else {
-      print(response.reasonPhrase);
-    }
-  }
+  //   if (response.statusCode == 200) {
+  //     print(await response.stream.bytesToString());
+  //   } else {
+  //     print(response.reasonPhrase);
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -100,7 +101,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                   CircleAvatar(
                     radius: 60,
                     backgroundImage: NetworkImage(
-                        'https://news.wasiljo.com/${deliveryBoy.avatarUrl}'),
+                        'https://admin.wasiljo.com/${deliveryBoy.avatarUrl}'),
                   ),
                   Text(deliveryBoy.name?.ar.toString() ?? '',
                       style: TextStyle(
