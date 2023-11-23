@@ -51,9 +51,9 @@ class Data {
 }
 
 class DeliveryBoy {
-  num? id;
+  int? id;
   Name? name;
-  String? agencyName;
+  AgencyName? agencyName;
   String? carNumber;
   String? email;
   String? emailVerifiedAt;
@@ -61,28 +61,28 @@ class DeliveryBoy {
   String? fcmToken;
   double? latitude;
   double? longitude;
-  num? isFree;
-  num? isOffline;
-  num? isActive;
+  int? isFree;
+  int? isOffline;
+  int? isActive;
   String? avatarUrl;
   String? mobile;
-  num? mobileVerified;
-  double? rating;
-  double? totalRating;
-  num? categoryId;
-  num? shopId;
+  int? mobileVerified;
+  int? rating;
+  int? totalRating;
+  int? categoryId;
+  int? shopId;
   String? rememberToken;
-  double? isVerified;
+  int? isVerified;
   String? drivingLicense;
   String? carLicense;
-  double? isApproval;
-  double? distance;
+  int? isApproval;
+  int? distance;
   String? otp;
-  double? totalCapacity;
-  double? totalQuantity;
-  double? availableQuantity;
+  int? totalCapacity;
+  int? totalQuantity;
+  int? availableQuantity;
   String? referrer;
-  dynamic? referrerLink;
+  String? referrerLink;
   String? createdAt;
   String? updatedAt;
   Category? category;
@@ -127,7 +127,9 @@ class DeliveryBoy {
   DeliveryBoy.fromJson(Map<String, dynamic> json) {
     id = json['id'];
     name = json['name'] != null ? new Name.fromJson(json['name']) : null;
-    agencyName = json['agency_name'];
+    agencyName =
+        json['agency_name'] != null ? AgencyName.fromJson(json['name']) : null;
+
     carNumber = json['car_number'];
     email = json['email'];
     emailVerifiedAt = json['email_verified_at'];
@@ -228,19 +230,38 @@ class Name {
   }
 }
 
+class AgencyName {
+  String? en;
+  String? ar;
+
+  AgencyName({this.en, this.ar});
+
+  AgencyName.fromJson(Map<String, dynamic> json) {
+    en = json['en'];
+    ar = json['ar'];
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = new Map<String, dynamic>();
+    data['en'] = this.en;
+    data['ar'] = this.ar;
+    return data;
+  }
+}
+
 class Category {
-  num? id;
+  int? id;
   Name? title;
   Name? description;
   double? commesion;
   String? imageUrl;
   String? type;
-  double? deliveryFee;
+  num? deliveryFee;
   String? expeditedFees;
   String? schedulerFees;
   String? startWorkTime;
   String? endWorkTime;
-  num? active;
+  int? active;
   String? createdAt;
   String? updatedAt;
 

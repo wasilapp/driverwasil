@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:developer';
 import 'package:DeliveryBoyApp/api/api_util.dart';
 import 'package:DeliveryBoyApp/models/AppData.dart';
 import 'package:DeliveryBoyApp/models/MyResponse.dart';
@@ -7,16 +8,16 @@ import 'package:DeliveryBoyApp/utils/InternetUtils.dart';
 import 'AuthController.dart';
 
 class AppDataController {
-
   //-------------------- Add user address --------------------------------//
   static Future<MyResponse<AppData>> getAppData() async {
     //Get Api Token
 
     String? token = await AuthController.getApiToken();
-    if (token!=null) {
-      String url = ApiUtil.MAIN_API_URL + ApiUtil.APP_DATA + ApiUtil.DELIVERY_BOY;
+    if (token != null) {
+      String url =
+          ApiUtil.MAIN_API_URL + ApiUtil.APP_DATA + ApiUtil.DELIVERY_BOY;
       Map<String, String> headers =
-      ApiUtil.getHeader(requestType: RequestType.GetWithAuth,token: token);
+          ApiUtil.getHeader(requestType: RequestType.GetWithAuth, token: token);
 
       //Check Internet
       bool isConnected = await InternetUtils.checkConnection();
@@ -25,8 +26,7 @@ class AppDataController {
       }
 
       try {
-        NetworkResponse response = await Network.get(
-            url, headers: headers);
+        NetworkResponse response = await Network.get(url, headers: headers);
 
         MyResponse<AppData> myResponse = MyResponse(response.statusCode);
         if (response.statusCode == 200) {
@@ -40,13 +40,13 @@ class AppDataController {
         return myResponse;
       } catch (e) {
         //If any server error...
+        log(e.toString());
         return MyResponse.makeServerProblemError<AppData>();
       }
-    }
-    else {
-      String url = ApiUtil.MAIN_API_URL + ApiUtil.APP_DATA ;
+    } else {
+      String url = ApiUtil.MAIN_API_URL + ApiUtil.APP_DATA;
       Map<String, String> headers =
-      ApiUtil.getHeader(requestType: RequestType.Get);
+          ApiUtil.getHeader(requestType: RequestType.Get);
 
       //Check Internet
       bool isConnected = await InternetUtils.checkConnection();
@@ -55,9 +55,7 @@ class AppDataController {
       }
 
       try {
-        NetworkResponse response = await Network.get(
-            url, headers: headers);
-
+        NetworkResponse response = await Network.get(url, headers: headers);
 
         MyResponse<AppData> myResponse = MyResponse(response.statusCode);
         if (response.statusCode == 200) {
@@ -71,10 +69,9 @@ class AppDataController {
         return myResponse;
       } catch (e) {
         //If any server error...
+        log(e.toString());
         return MyResponse.makeServerProblemError<AppData>();
       }
     }
   }
-
-
 }

@@ -30,17 +30,19 @@ class AuthControllerr extends GetxController {
       'https://admin.wasiljo.com/public/api/v1/delivery-boy/login?lang=ar';
   @override
   void onInit() async {
-    if (token.isNotEmpty) {
+    if (token != null && token!.isNotEmpty) {
       await getData(pathUrl: ApiPath.deliveryBoyData, token: token)
           .then((value) {
         print(value);
-        if (value['status']) {
+        if (value['status'] == true) {
           appUser.appUserData = appUser.AppUserData.fromJson(value['data']);
         }
         update();
       }).catchError((error) {
         print(error);
       });
+    } else {
+      return null;
     }
     super.onInit();
   }
@@ -347,8 +349,10 @@ class AuthControllerr extends GetxController {
       'Content-Type': 'application/json'
     };
 
-    var request = http.MultipartRequest('POST', Uri.parse('https://admin.wasiljo.com/public/api/v1/delivery-boy/register?lang=ar'));
-
+    var request = http.MultipartRequest(
+        'POST',
+        Uri.parse(
+            'https://admin.wasiljo.com/public/api/v1/delivery-boy/register?lang=ar'));
 
     request.fields.addAll({
       'name[en]': nameArabic,
@@ -364,9 +368,14 @@ class AuthControllerr extends GetxController {
       'agency_name[ar]': agencyArabic
     });
 
-    request.files.add(await http.MultipartFile.fromPath('car_license', drivingLicense!.path));
-    request.files.add(await http.MultipartFile.fromPath('avatar_url', profilePic!.path));
-    car==null?'': request.files.add(await http.MultipartFile.fromPath('driving_license', car!.path));
+    request.files.add(
+        await http.MultipartFile.fromPath('car_license', drivingLicense!.path));
+    request.files
+        .add(await http.MultipartFile.fromPath('avatar_url', profilePic!.path));
+    car == null
+        ? ''
+        : request.files.add(
+            await http.MultipartFile.fromPath('driving_license', car!.path));
 
     request.headers.addAll(headers);
 
@@ -794,11 +803,21 @@ class AuthControllerr extends GetxController {
       String? token = sharedPreferences.getString("token");
       bool mobileVerified =
           sharedPreferences.getBool('mobile_verified') ?? false;
+      // String? token = sharedPreferences.getString('token');
       if (token == null) {
+        log('message$token');
+        return AuthType.NOT_FOUND;
+      } else if (token.isNotEmpty) {
+        log('message$token');
+        log('mobileVerified$mobileVerified');
+
+        return AuthType.VERIFIED;
+      } else {
         return AuthType.NOT_FOUND;
       }
-      return AuthType.VERIFIED;
+      // return AuthType.VERIFIED;
     } catch (e) {
+      log(e.toString());
       return AuthType.NOT_FOUND;
     }
   }

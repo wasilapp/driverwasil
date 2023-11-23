@@ -1,41 +1,39 @@
 import 'dart:convert';
 import 'dart:developer';
-import 'dart:ffi';
+
 import 'dart:io';
 
 import 'package:DeliveryBoyApp/services/AppLocalizations.dart';
 import 'package:DeliveryBoyApp/utils/SizeConfig.dart';
-import 'package:DeliveryBoyApp/utils/Validator.dart';
+
 import 'package:DeliveryBoyApp/utils/colors.dart';
 import 'package:DeliveryBoyApp/utils/helper/commonview.dart';
-import 'package:DeliveryBoyApp/utils/ui/logo.dart';
+
 import 'package:DeliveryBoyApp/views/auth/Categories.dart';
 import 'package:DeliveryBoyApp/views/auth/CategoryController.dart';
 import 'package:DeliveryBoyApp/views/auth/shop_model.dart';
 import 'package:country_picker/country_picker.dart';
-import 'package:dio/dio.dart';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:image_picker/image_picker.dart';
-import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
+
 import 'package:provider/provider.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+
 import 'package:sizer/sizer.dart';
 import '../../AppTheme.dart';
 import '../../AppThemeNotifier.dart';
-import '../../api/api.dart';
-import '../../controllers/AuthController.dart';
+
 import '../../utils/TextUtils.dart';
 import '../../utils/fonts.dart';
 import '../../utils/helper/navigator.dart';
-import '../../utils/navigator.dart';
+
 import '../../utils/ui/textfeild.dart';
-import '../AppScreen.dart';
+
 import 'login/LoginScreen.dart';
-import 'OTPVerificationScreen.dart';
+
 import 'authControllernew.dart';
-import 'd.dart';
 
 class RegisterScreen extends StatefulWidget {
   @override
@@ -194,6 +192,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
               body: Form(
             key: formState,
             child: ListView(
+              shrinkWrap: true,
+              physics: AlwaysScrollableScrollPhysics(),
               children: <Widget>[
                 SizedBox(
                   height: 30,
@@ -267,6 +267,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           if (value.length != 9) {
                             return 'mobile number not eqiual 9 ';
                           }
+                          return null;
                         },
                         hintText: 'mobile Number',
                         controller: mobile!,
@@ -276,16 +277,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     ],
                   ),
                 ),
-                Expanded(
-                  child: CustomTextField(
-                    keyBoard: TextInputType.emailAddress,
-                    controller: email!,
-                    hintText: Translator.translate("Email"),
-                    prefixIconData: Icon(Icons.email_outlined),
-                    onPrefixIconPress: () {
-                      setState(() {});
-                    },
-                  ),
+                CustomTextField(
+                  keyBoard: TextInputType.emailAddress,
+                  controller: email!,
+                  hintText: Translator.translate("Email"),
+                  prefixIconData: Icon(Icons.email_outlined),
+                  onPrefixIconPress: () {
+                    setState(() {});
+                  },
                 ),
                 // CustomTextField(
                 //   validator: (value) {

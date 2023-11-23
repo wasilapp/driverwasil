@@ -21,6 +21,7 @@ import 'package:DeliveryBoyApp/views/auth/login/LoginScreen.dart';
 import 'package:DeliveryBoyApp/views/auth/edit_profile/edit_profile_view.dart';
 import 'package:DeliveryBoyApp/views/detail_order/detail_order.dart';
 
+import '../profile_view/profile_controller.dart';
 import '../profile_view/profile_view.dart';
 import 'order_controller.dart';
 import 'order_model.dart';
@@ -40,6 +41,7 @@ class _HomeScreenState extends State<HomeScreen>
   // AuthController controller = Get.put(AuthController());
   GetOrderController orderController = Get.put(GetOrderController());
   // AuthController authController = Get.put(AuthController());
+  DeliveryBoyShowProfile _boyShowProfile = Get.put(DeliveryBoyShowProfile());
   AuthControllerr authControllerr = Get.put(AuthControllerr());
   TabController? tabController;
   @override
@@ -99,13 +101,15 @@ class _HomeScreenState extends State<HomeScreen>
                 driverStatus = 1;
               });
               Get.find<AuthControllerr>().saveDeliveryBoyData(appUserData);
+              _boyShowProfile.updateStatus(driverStatus);
             });
           } else {
             appUserData.data!.deliveryBoy!.isActive = driverStatus;
             setState(() {
-              driverStatus = 1;
+              driverStatus = 0;
             });
             Get.find<AuthControllerr>().saveDeliveryBoyData(appUserData);
+            _boyShowProfile.updateStatus(driverStatus);
           }
         },
         child: Container(
@@ -640,7 +644,7 @@ class _HomeScreenState extends State<HomeScreen>
                         );
                       }),
                     ],
-                  ),
+                  ).paddingOnly(bottom: 50),
                 ),
     ));
   }
